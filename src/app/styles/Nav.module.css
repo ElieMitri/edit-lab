@@ -16,6 +16,13 @@
   background-color: #2f2f2f;
 }
 
+.navText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row-reverse;
+}
+
 .logoWrapper {
   width: 200px;
   display: flex;
@@ -46,6 +53,7 @@
   justify-content: center;  
   cursor: pointer;
   transition: 300ms all ease;
+  margin-right: 20px;
 }
 
 .button:hover {
@@ -133,4 +141,43 @@
 display: flex;
 align-items: center;
 justify-content: center;
+}
+
+.paymentMethod {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.paymentName {
+  width: 200px;
+  height: 40px;
+  border-radius: 6px;
+  outline: none; 
+  border: none;
+  background-color: #5e17eb;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 300ms all ease;
+  margin-left: 20px;
+}
+
+.paymentName:hover {
+  background-color: #4a15b3;
+}
+
+.paymentLogoWhish {
+  width: 80px;
+  height: auto;
+}
+.paymentLogoOMT {
+  width: 120px;
+  height: auto;
+}
+.paymentLogoCrypto {
+  width: 60px;
+  height: auto;
 }

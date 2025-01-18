@@ -34,10 +34,16 @@ import {
   getFirestore,
   getDocs,
 } from "firebase/firestore";
+
+import { query, where } from "firebase/firestore";
 import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import { IoClose } from "react-icons/io5";
+
+import OMT from "../../../public/OMT.png"
+import Whish from "../../../public/Whish.png"
+import Crypto from "../../../public/Crypto.png"
 
 export default function Navbar() {
   // const router = useRouter();
@@ -49,9 +55,12 @@ export default function Navbar() {
   const [loading, setLoading] = useState(true);
   const [switched, setSwitched] = useState(false);
   const [error, setError] = useState(null);
+  const [paid, setPaid] = useState(false);
   const [passwordError, setPasswordError] = useState(null);
   const [memberFirstLetter, setMemberFirstLetter] = useState();
   const [openedSidebar, setOpenedSidebar] = useState(false);
+  const [matchingUser, setMatchingUser] = useState(null);
+  const [openedPayment, setOpenedPayment] = useState(false);
 
   const style = {
     position: "absolute",
@@ -174,7 +183,82 @@ export default function Navbar() {
     document.body.style.overflow = "";
   }
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
 
+      if (currentUser) {
+        // console.log(currentUser.auth);
+        // console.log(currentUser.email);
+        // console.log(currentUser.uid);
+
+        // Call the function to fetch all users from Firestore
+        try {
+          const usersCollectionRef = collection(db, "users");
+          const querySnapshot = await getDocs(usersCollectionRef);
+
+          const users = querySnapshot.docs.map((doc) => ({
+            id: doc.id, // UID of the user
+            ...doc.data(), // Other user data
+          }));
+
+          console.log("Fetched Users:", users);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the listener
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+
+      if (currentUser) {
+        // Get current logged-in user's email
+        const currentUserEmail = currentUser.email;
+        console.log("Current User Email:", currentUserEmail);
+
+        try {
+          // Create a Firestore query to fetch users by email
+          const usersCollectionRef = collection(db, "users");
+          const q = query(
+            usersCollectionRef,
+            where("email", "==", currentUserEmail)
+          );
+
+          // Get the users that match the email
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            // If a matching user is found
+            const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
+            setMatchingUser(matchedUser); // Store the matched user data
+            console.log(matchedUser);
+            if (matchedUser.subscriptionPlan === "Paid") {
+              setPaid(true);
+            }
+          } else {
+            console.log("No user found with this email.");
+          }
+        } catch (error) {
+          console.error("Error fetching users by email:", error);
+        }
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the listener when the component unmounts
+  }, []);
+
+  function handlePayment() {
+    setOpen(true);
+  }
 
   return (
     <>
@@ -196,16 +280,57 @@ export default function Navbar() {
             </figure>
           </div>
           <div className={styles.navText}>
-            {/* <button className={styles.button} onClick={handleOpen}>
-              Lab Member <LuCrown className={styles.crown} />
-            </button> */}
             <div className={styles.firstLetter}>{user.displayName[0]}</div>
+
+            {paid ? (
+              <></>
+            ) : (
+              <button className={styles.button} onClick={handlePayment}>
+                Lab Member <LuCrown className={styles.crown} />
+              </button>
+            )}
           </div>
           {openedSidebar ? (
             <Sidebar setOpenedSidebar={setOpenedSidebar} />
           ) : (
             <></>
           )}
+
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+              backdrop: {
+                timeout: 500,
+              },
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={style}>
+                <div className="login__inputs">
+                  <h1 className="login__title">Payment Methods</h1>
+                  <div className={styles.paymentMethods}>
+                    <div className={styles.paymentMethod}>
+                      <Image src={OMT} className={styles.paymentLogoOMT} alt="" priority/>
+                      <button className={styles.paymentName}>OMT</button>
+                    </div>
+                    <div className={styles.paymentMethod}>
+                      <Image src={Whish} className={styles.paymentLogoWhish} alt="" priority/>
+                      <button className={styles.paymentName}>Whish</button>
+                    </div>
+                    <div className={styles.paymentMethod}>
+                      <Image src={Crypto} className={styles.paymentLogoCrypto} alt="" priority/>
+                      <button className={styles.paymentName}>Crypto</button>
+                    </div>
+                  </div>
+                </div>
+              </Box>
+            </Fade>
+          </Modal>
         </nav>
       ) : (
         <nav className={styles.nav}>
@@ -214,7 +339,7 @@ export default function Navbar() {
           </figure>
           <div className={styles.navText}>
             <button className={styles.button} onClick={handleOpen}>
-              Lab Member <LuCrown className={styles.crown} />
+              Lab Member
             </button>
           </div>
 

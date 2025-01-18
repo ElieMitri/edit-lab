@@ -24,6 +24,7 @@ export default function Page() {
 
   const [user, setUser] = useState();
   const [paid, setPaid] = useState(false);
+  const [text, setText] = useState(false);
 
   const [matchingUser, setMatchingUser] = useState(null); // This will store the matched user data
 
@@ -114,41 +115,45 @@ export default function Page() {
     <>
       <div>
         <Navbar />
-
-        {paid ? (
+        {user ? (
           <>
-            <div className={styles.courseDetailsWrapper}>
-              <div className={styles.courseDetails}>
-                {courseData.map((course, index) => (
-                  <Link href="/" className={styles.courseDetail} key={index}>
-                    <div className={styles.detailItem}>
-                      Title: {course.title}
-                    </div>
-                    <div className={styles.detailItem}>
-                      Duration: {course.duration}
-                    </div>
-                    <label className={styles.checkboxWrapper}>
-                      <input type="checkbox" className={styles.checkbox} />
-                      <span className={styles.customCheckbox}></span>
-                    </label>
-                  </Link>
-                ))}
+            {paid ? (
+              <>
+                <div className={styles.courseDetailsWrapper}>
+                  <div className={styles.courseDetails}>
+                    {courseData.map((course, index) => (
+                      <Link
+                        href="/"
+                        className={styles.courseDetail}
+                        key={index}
+                      >
+                        <div className={styles.detailItem}>
+                          Title: {course.title}
+                        </div>
+                        <div className={styles.detailItem}>
+                          Duration: {course.duration}
+                        </div>
+                        <label className={styles.checkboxWrapper}>
+                          <input type="checkbox" className={styles.checkbox} />
+                          <span className={styles.customCheckbox}></span>
+                        </label>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className={styles.videoWrapperFake}>
+                <div>
+                  <div className={styles.playerTextFake}>
+                    You don't have access!
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </>
         ) : (
-          <div className={styles.videoWrapperFake}>
-            {/* <div className={styles.videoFake}> */}
-              <div
-                // style={{
-                //   padding: "56.25% 0 0 0",
-                //   position: "relative",
-                // }}
-              >
-                <div className={styles.playerTextFake}>You don't have access!</div>
-              {/* </div> */}
-            </div>
-          </div>
+          <></>
         )}
       </div>
     </>
