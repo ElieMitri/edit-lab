@@ -10,11 +10,18 @@ import {
   updateProfile,
   signOut as firebaseSignOut,
 } from "firebase/auth";
-
 import { db, auth } from "../../../firebase";
 import Link from "next/link";
 import { IoMdPerson } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
+import Accordion from "@mui/material/Accordion";
+import AccordionActions from "@mui/material/AccordionActions";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import { IoIosArrowDown } from "react-icons/io";
+import { courseData } from "../../../courseData";
 
 const Sidebar = (setCloseSidebar) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,8 +29,7 @@ const Sidebar = (setCloseSidebar) => {
 
   const menuItems = [
     { icon: "🏠", label: "Dashboard", link: "/" },
-    { icon: "📚", label: "Courses", link: "/course" },
-    { icon: "📊", label: "Progress", link: "/progress" },
+    { icon: "📚", label: "Course", link: "/course" },
     { icon: "⚙️", label: "Settings", link: "/account" },
   ];
 
@@ -48,7 +54,6 @@ const Sidebar = (setCloseSidebar) => {
 
   return (
     <>
-      {/* Hamburger Menu Button - Visible on Mobile */}
       <button
         className={styles.menuButton}
         onClick={toggleSidebar}
@@ -61,10 +66,6 @@ const Sidebar = (setCloseSidebar) => {
         </div>
       </button>
 
-      {/* Overlay - Visible on Mobile when Sidebar is Open */}
-      {isOpen && <div className={styles.overlay} onClick={toggleSidebar}></div>}
-
-      {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <nav className={styles.navigation}>
           {menuItems.map((item, index) => (
@@ -77,7 +78,7 @@ const Sidebar = (setCloseSidebar) => {
 
         <div className={styles.userSection}>
           <div className={styles.userInfo}>
-            <IoMdPerson className={styles.userPic}/>
+            <IoMdPerson className={styles.userPic} />
             <p className={styles.userName}>{user.displayName}</p>
           </div>
           <Link href="/">

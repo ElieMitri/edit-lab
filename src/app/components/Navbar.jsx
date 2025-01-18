@@ -62,7 +62,6 @@ export default function Navbar() {
     bgcolor: "#2f2f2f",
     borderRadius: "15px",
     padding: "0",
-    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
     outline: "none",
@@ -174,6 +173,8 @@ export default function Navbar() {
     setOpenedSidebar(false);
     document.body.style.overflow = "";
   }
+
+
 
   return (
     <>

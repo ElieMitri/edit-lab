@@ -1,76 +1,198 @@
 .videoWrapper {
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 30px 0;
-    flex-direction: column;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+  flex-direction: column;
 }
 
 .video {
-    width: 80%;
+  width: 80%;
 }
 
 .videoTitle {
-    color: #5e17eb;
-    width: 80%;
+  color: #5e17eb;
+  width: 80%;
 }
 
 .textWrapper {
-    width: 80%;
+  width: 80%;
 }
 
 .buttonWrapper {
-    display: flex;
-    justify-content: space-between;
-    margin: 30px 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
 }
 
 .buttonMark {
-    width: 170px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: #5e17eb;
-    outline: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: 300ms all ease;
-    font-weight: bold;
-    font-size: 15px;
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #5e17eb;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .buttonMark:hover {
-    background-color: #4a15b3;
+  background-color: #4a15b3;
 }
 
 .buttonContinue {
-    width: 170px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: #dadada;
-    outline: none;
-    border: none;
-    color: rgb(29, 29, 29);
-    cursor: pointer;
-    transition: 300ms all ease;
-    font-weight: bold;
-    font-size: 15px;
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #dadada;
+  outline: none;
+  border: none;
+  color: rgb(29, 29, 29);
+  cursor: pointer;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .buttonContinue:hover {
-    background-color: #afafaf;
+  background-color: #afafaf;
 }
 
-
 @media (max-width: 720px) {
-    .video {
-        width: 100%;
-    }
+  .video {
+    width: 100%;
+  }
 
-    .textWrapper {
-        width: 90%;
-    }
-    
+  .textWrapper {
+    width: 90%;
+  }
+}
+
+.checkboxWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.customCheckbox {
+  width: 24px;
+  height: 24px;
+  background-color: #444;
+  border: 2px solid #555;
+  border-radius: 4px;
+  display: inline-block;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: relative;
+}
+
+.checkbox:checked + .customCheckbox {
+  background-color: #5e17eb;
+  border-color: #5e17eb;
+}
+
+.customCheckbox::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 14px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.checkbox:checked + .customCheckbox::after {
+  opacity: 1;
+}
+
+.courseDetailsWrapper {
+  width: 100%;
+  /* height: calc(100vh - 84px); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.courseDetails {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+}
+
+.courseDetail {
+  width: calc(70% / 3);
+  background-color: #505050;
+  border-radius: 7px;
+  margin: 20px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.courseDetail:hover {
+  background-color: #6b6b6b;
+}
+
+.detailItem {
+  margin-bottom: 20px;
+  border-bottom: 2px solid white;
+  padding: 14px;
+  color: white;
+  text-decoration: none;
+  list-style-type: none;
+}
+
+@media (max-width: 970px) {
+  .courseDetails {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    /* width: 80%; */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .courseDetail {
+    width: 50%;
+    background-color: #505050;
+    border-radius: 7px;
+    margin: 20px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+  }
+}
+@media (max-width: 570px) {
+  .courseDetail {
+    width: 70%;
+  }
 }

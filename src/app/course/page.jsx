@@ -15,6 +15,9 @@ import {
 import { CiLogout } from "react-icons/ci";
 import Link from "next/link";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { courseData } from "../../../courseData";
+import { styled } from "@mui/material/styles";
+import Checkbox from "@mui/material/Checkbox";
 
 export default function Page() {
   const userData = auth.currentUser;
@@ -67,6 +70,10 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    console.log(courseData);
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
@@ -109,7 +116,48 @@ export default function Page() {
         <Navbar />
 
         {paid ? (
+          <>
+            <div className={styles.courseDetailsWrapper}>
+              <div className={styles.courseDetails}>
+                {courseData.map((course, index) => (
+                  <Link href="/" className={styles.courseDetail} key={index}>
+                    <div className={styles.detailItem}>
+                      Title: {course.title}
+                    </div>
+                    <div className={styles.detailItem}>
+                      Duration: {course.duration}
+                    </div>
+                    <label className={styles.checkboxWrapper}>
+                      <input type="checkbox" className={styles.checkbox} />
+                      <span className={styles.customCheckbox}></span>
+                    </label>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
           <div className={styles.videoWrapper}>
+            <div className={styles.video}>
+              <div
+                style={{
+                  padding: "56.25% 0 0 0",
+                  position: "relative",
+                  backgroundColor: "black",
+                }}
+              >
+                <div className={styles.playerText}></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+{
+  /* <div className={styles.videoWrapper}>
             <div className={styles.video}>
               <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
                 <iframe
@@ -135,32 +183,63 @@ export default function Page() {
                 omnis aliquam tenetur nobis neque! Magnam laborum animi fuga
                 aliquid repudiandae error pariatur? Lorem ipsum dolor sit amet
                 consectetur adipisicing elit. Repellendus totam earum voluptatum
-                quas cum! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
+                quas! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
                 Magnam laborum animi fuga aliquid repudiandae error pariatur?
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellendus totam earum voluptatum quas cum! Aut iusto, dolorum
-                omnis aliquam tenetur nobis neque! Magnam laborum animi fuga
-                aliquid repudiandae error pariatur? Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Repellendus totam earum voluptatum
-                quas cum! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
-                Magnam laborum animi fuga aliquid repudiandae error pariatur?
+                Repellendus totam earum voluptatum quas cum! 
               </p>
               <div className={styles.buttonWrapper}>
                 <button className={styles.buttonContinue}>Mark Complete</button>
                 <button className={styles.buttonMark}>Continue</button>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className={styles.videoWrapper}>
-          <div className={styles.video}>
-            <div style={{ padding: "56.25% 0 0 0", position: "relative", backgroundColor: "black" }}>
-              <div className={styles.playerText}></div>
-            </div>
-          </div>
-        </div>
-        )}
-      </div>
-    </>
-  );
+          </div> */
 }
+
+// {paid ? (
+//   <div className={styles.videoWrapper}>
+//     <div className={styles.video}>
+//       <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
+//         <iframe
+//           src="https://player.vimeo.com/video/851580640?badge=0&autopause=0&player_id=0&app_id=58479"
+//           frameBorder="0"
+//           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+//           style={{
+//             position: "absolute",
+//             top: 0,
+//             left: 0,
+//             width: "100%",
+//             height: "100%",
+//           }}
+//           // title="Fortnite_20221029212356"
+//         ></iframe>
+//       </div>
+//     </div>
+//     <div className={styles.textWrapper}>
+//       <h1 className={styles.videoTitle}>Editing</h1>
+//       <p>
+//         Lorem ipsum dolor sit amet consectetur adipisicing elit.
+//         Repellendus totam earum voluptatum quas cum! Aut iusto, dolorum
+//         omnis aliquam tenetur nobis neque! Magnam laborum animi fuga
+//         aliquid repudiandae error pariatur? Lorem ipsum dolor sit amet
+//         consectetur adipisicing elit. Repellendus totam earum voluptatum
+//         quas! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
+//         Magnam laborum animi fuga aliquid repudiandae error pariatur?
+//         Lorem ipsum dolor sit amet consectetur adipisicing elit.
+//         Repellendus totam earum voluptatum quas cum!
+//       </p>
+//       <div className={styles.buttonWrapper}>
+//         <button className={styles.buttonContinue}>Mark Complete</button>
+//         <button className={styles.buttonMark}>Continue</button>
+//       </div>
+//     </div>
+//   </div>
+// ) : (
+//   <div className={styles.videoWrapper}>
+//   <div className={styles.video}>
+//     <div style={{ padding: "56.25% 0 0 0", position: "relative", backgroundColor: "black" }}>
+//       <div className={styles.playerText}></div>
+//     </div>
+//   </div>
+// </div>
+// )}

@@ -1,82 +1,91 @@
+/* Wrapper for Account Details */
+
+
 .accDetailsWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80vh;
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  border-radius: 8px;
+  max-width: 500px; /* Slightly larger width */
+  margin: 0 auto;
+  color: #fff;
+  background-color: #2f2f2f; /* Ensure background is consistent */
+  height: calc(100vh - 84px); /* Full viewport height to center vertically */
+  box-sizing: border-box; /* Include padding in width/height */
 }
 
+/* Details Container */
 .accDetails {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 30px; /* Larger gap between each detail */
 }
 
+/* Individual Detail Items */
 .accDetail {
-  margin: 70px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444;
+  padding-bottom: 12px; /* Extra padding for spacing */
+  margin: 70px 0; /* Increased vertical spacing */
+  gap: 80px; /* Very large gap between label and value */
 }
 
-.detail {
-  margin-left: 30px;
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.781);
-}
-
-.logoutBtn {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  font-size: 34px;
+/* Label Text */
+.accDetailText {
   font-weight: bold;
-  margin: 20px;
+  font-size: 28px; /* Larger font size for emphasis */
+  margin-right: 100px; /* Maximum space between label and value */
+  flex: 1; /* Allow flexibility for the text */
+}
+
+/* Value Text */
+.detail {
+  font-size: 24px; /* Larger value text */
+  color: #ccc;
+  flex: 1; /* Allow flexibility for the text */
+  text-align: right;
+}
+
+/* Logout Button */
+.logoutBtn {
+  font-size: 24px;
+  font-weight: bold;
   color: red;
   cursor: pointer;
-  transition: 300ms all ease;
+  transition: color 0.3s ease;
+  margin-top: 30px; /* Extra spacing for balance */
 }
+
 .logoutBtn:hover {
   color: rgb(172, 3, 3);
 }
 
-.accDetailText {
-  font-size: 30px;
+/* Responsive Adjustments */
+@media (max-width: 800px) {
+  .accDetailsWrapper {
+    max-width: 90%; /* Take up more width on smaller screens */
+  }
+
+  .accDetail {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    gap: 50px; /* Reduced gap for smaller screens */
+  }
+
+  .accDetailText {
+    margin-right: 30px; /* Adjust margin for smaller screens */
+  }
+
+  .accDetailText,
+  .detail {
+    font-size: 20px; /* Maintain readability */
+  }
+
+  .logoutBtn {
+    font-size: 20px; /* Adjust button size */
+  }
 }
 
-.accDetail {
-  display: flex;
-  align-items: center;
-  /* justify-content: space-between; */
-  width: 700px;
-}
 
-/* AccountDetails.module.css */
-.accDetailsWrapper {
-  padding: 20px; /* Space around the content */
-  border-radius: 8px; /* Smooth rounded corners */
-  max-width: 400px; /* Limit the width */
-  margin: 0 auto; /* Center the component */
-  color: #fff; /* Light text for dark background */
-}
-
-.accDetails {
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  gap: 20px; /* Add space between each detail */
-}
-
-.accDetail {
-  display: flex;
-  justify-content: space-between; /* Align label and value */
-  align-items: center; /* Center items vertically */
-  border-bottom: 1px solid #444; /* Add bottom border for separation */
-  padding-bottom: 8px; /* Add space under each detail */
-}
-
-.accDetailText {
-  font-weight: bold; /* Make labels stand out */
-  font-size: 16px; /* Adjust font size for clarity */
-  margin-right: 10px; /* Add space between label and value */
-}
-
-.detail {
-  font-size: 16px; /* Consistent font size */
-  color: #ccc; /* Slightly lighter color for the value */
-}
