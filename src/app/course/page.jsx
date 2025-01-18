@@ -138,15 +138,15 @@ export default function Page() {
           </>
         ) : (
           <div className={styles.videoWrapperFake}>
-            <div className={styles.videoFake}>
+            {/* <div className={styles.videoFake}> */}
               <div
-                style={{
-                  padding: "56.25% 0 0 0",
-                  position: "relative",
-                }}
+                // style={{
+                //   padding: "56.25% 0 0 0",
+                //   position: "relative",
+                // }}
               >
                 <div className={styles.playerTextFake}>You don't have access!</div>
-              </div>
+              {/* </div> */}
             </div>
           </div>
         )}
