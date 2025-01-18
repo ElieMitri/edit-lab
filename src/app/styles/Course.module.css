@@ -1,0 +1,76 @@
+.videoWrapper {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    flex-direction: column;
+}
+
+.video {
+    width: 80%;
+}
+
+.videoTitle {
+    color: #5e17eb;
+    width: 80%;
+}
+
+.textWrapper {
+    width: 80%;
+}
+
+.buttonWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+}
+
+.buttonMark {
+    width: 170px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #5e17eb;
+    outline: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 300ms all ease;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.buttonMark:hover {
+    background-color: #4a15b3;
+}
+
+.buttonContinue {
+    width: 170px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #dadada;
+    outline: none;
+    border: none;
+    color: rgb(29, 29, 29);
+    cursor: pointer;
+    transition: 300ms all ease;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.buttonContinue:hover {
+    background-color: #afafaf;
+}
+
+
+@media (max-width: 720px) {
+    .video {
+        width: 100%;
+    }
+
+    .textWrapper {
+        width: 90%;
+    }
+    
+}

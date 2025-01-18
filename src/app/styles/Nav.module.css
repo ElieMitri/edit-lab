@@ -1,0 +1,136 @@
+.navWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 4px solid rgba(100, 100, 100, 0.342);
+  background-color: #2f2f2f;
+}
+
+.logoWrapper {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  background: none;
+}
+
+.button {
+  width: 170px;
+  height: 40px;
+  color: white;
+  background-color: #5e17eb;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.button:hover {
+  background-color: #4a15b3;
+}
+
+
+.crown {
+  color: gold;
+  font-size: 22px;
+  background-color: #5e17eb00;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.errorMessage {
+  color: white;
+  background-color:  rgb(192, 27, 27);
+  height: 40px;
+  width: 290px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.firstLetter {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5e17eb;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: 300ms all ease;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.firstLetter:hover {
+  background-color: #4a15b3;
+}
+
+.logoutBtn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 34px;
+  font-weight: bold;
+  margin: 20px;
+  color: red;
+  cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.logoutBtn:hover {
+  color: rgb(172, 3, 3);
+}
+
+.burger {
+  font-size: 28px;
+  color: #5e17eb;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.burger:hover {
+  color: #4a15b3;
+}
+
+.burgerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burgerLogo {
+display: flex;
+align-items: center;
+justify-content: center;
+}
