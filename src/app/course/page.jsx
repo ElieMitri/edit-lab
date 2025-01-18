@@ -137,16 +137,15 @@ export default function Page() {
             </div>
           </>
         ) : (
-          <div className={styles.videoWrapper}>
-            <div className={styles.video}>
+          <div className={styles.videoWrapperFake}>
+            <div className={styles.videoFake}>
               <div
                 style={{
                   padding: "56.25% 0 0 0",
                   position: "relative",
-                  backgroundColor: "black",
                 }}
               >
-                <div className={styles.playerText}></div>
+                <div className={styles.playerTextFake}>You don't have access!</div>
               </div>
             </div>
           </div>
