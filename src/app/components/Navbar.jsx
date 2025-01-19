@@ -41,16 +41,18 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import { IoClose } from "react-icons/io5";
 
-import OMT from "../../../public/OMT.png"
-import Whish from "../../../public/Whish.png"
-import Crypto from "../../../public/Crypto.png"
+import OMT from "../../../public/OMT.png";
+import Whish from "../../../public/Whish.png";
+import Crypto from "../../../public/Crypto.png";
 
 export default function Navbar() {
   // const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
+  const handleOpenPayment = () => setOpenPayment(true);
+  const [openPayment, setOpenPayment] = useState(false);
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [switched, setSwitched] = useState(false);
@@ -61,6 +63,7 @@ export default function Navbar() {
   const [openedSidebar, setOpenedSidebar] = useState(false);
   const [matchingUser, setMatchingUser] = useState(null);
   const [openedPayment, setOpenedPayment] = useState(false);
+  const handleClosePayment = () => setOpenPayment(false);
 
   const style = {
     position: "absolute",
@@ -78,6 +81,7 @@ export default function Navbar() {
 
   function handleClose() {
     setOpen(false);
+    setOpenPayment(false);
     setError(null);
     setPasswordError(null);
   }
@@ -257,7 +261,7 @@ export default function Navbar() {
   }, []);
 
   function handlePayment() {
-    setOpen(true);
+    setOpenPayment(true);
   }
 
   return (
@@ -285,7 +289,7 @@ export default function Navbar() {
             {paid ? (
               <></>
             ) : (
-              <button className={styles.button} onClick={handlePayment}>
+              <button className={styles.button} onClick={handleOpenPayment}>
                 Lab Member <LuCrown className={styles.crown} />
               </button>
             )}
@@ -295,12 +299,11 @@ export default function Navbar() {
           ) : (
             <></>
           )}
-
           <Modal
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
-            open={open}
-            onClose={handleClose}
+            open={openPayment}
+            onClose={handleClosePayment}
             closeAfterTransition
             slots={{ backdrop: Backdrop }}
             slotProps={{
@@ -309,24 +312,41 @@ export default function Navbar() {
               },
             }}
           >
-            <Fade in={open}>
+            <Fade in={openPayment}>
               <Box sx={style}>
                 <div className="login__inputs">
-                  <h1 className="login__title">Payment Methods</h1>
+                  <h1 className="login__title">
+                    Become a Premium Lab Member{" "}
+                    <LuCrown className={styles.crown} />
+                  </h1>
                   <div className={styles.paymentMethods}>
                     <div className={styles.paymentMethod}>
-                      <Image src={OMT} className={styles.paymentLogoOMT} alt="" priority/>
+                      <Image
+                        src={OMT}
+                        className={styles.paymentLogoOMT}
+                        alt=""
+                        priority
+                      />
                       <button className={styles.paymentName}>OMT</button>
                     </div>
                     <div className={styles.paymentMethod}>
-                      <Image src={Whish} className={styles.paymentLogoWhish} alt="" priority/>
+                      <Image
+                        src={Whish}
+                        className={styles.paymentLogoWhish}
+                        alt=""
+                        priority
+                      />
                       <button className={styles.paymentName}>Whish</button>
                     </div>
                     <div className={styles.paymentMethod}>
-                      <Image src={Crypto} className={styles.paymentLogoCrypto} alt="" priority/>
+                      <Image
+                        src={Crypto}
+                        className={styles.paymentLogoCrypto}
+                        alt=""
+                        priority
+                      />
                       <button className={styles.paymentName}>Crypto</button>
                     </div>
-                    
                   </div>
                 </div>
               </Box>
@@ -372,7 +392,7 @@ export default function Navbar() {
                       className="modal__input"
                       placeholder="Email"
                       ref={userEmail}
-                      onChange={() => console.log(userPassword.current.value)}
+                      // onChange={() => console.log(userPassword.current.value)}
                     />
                     <div className="password__login">
                       <input
@@ -380,7 +400,7 @@ export default function Navbar() {
                         className="modal__input"
                         placeholder="••••••••••••"
                         ref={userPassword}
-                        onChange={() => console.log(userPassword.current.value)}
+                        // onChange={() => console.log(userPassword.current.value)}
                       />
                       <div>
                         {passwordError ? (

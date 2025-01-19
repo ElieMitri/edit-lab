@@ -19,7 +19,12 @@ import { courseData } from "../../../courseData";
 import { styled } from "@mui/material/styles";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function Page() {
+export default function Page({ params }) {
+  const { id } = React.use(params);
+
+  console.log(id);
+  const course = courseData.find((item) => +item.id === +id);
+
   const userData = auth.currentUser;
 
   const [user, setUser] = useState();
@@ -123,8 +128,8 @@ export default function Page() {
                   <div className={styles.courseDetails}>
                     {courseData.map((course, index) => (
                       <Link
-                        href="/"
-                        className={styles.courseDetail}
+                        href={`/course/${course.id}`}
+                        className={styles.courseDetailAccess}
                         key={index}
                       >
                         <div className={styles.detailItem}>
@@ -143,11 +148,23 @@ export default function Page() {
                 </div>
               </>
             ) : (
-              <div className={styles.videoWrapperFake}>
-                <div>
-                  <div className={styles.playerTextFake}>
-                    You don't have access!
-                  </div>
+              <div className={styles.courseDetailsWrapper}>
+                <div className={styles.courseDetails}>
+                  {courseData.map((course, index) => (
+                    <div className={styles.courseDetail} key={index}>
+                      <div className={styles.detailItem}>
+                        Title: {course.title}
+                      </div>
+                      <div className={styles.detailItem}>
+                        Duration: {course.duration}
+                      </div>
+                      <label className={styles.checkboxWrapper}>
+                        <input type="checkbox" className={styles.checkbox} />
+                        <span className={styles.customCheckbox}></span>
+                      </label>
+                      <h1 className={styles.noAccess}>No Access</h1>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -190,7 +207,7 @@ export default function Page() {
                 quas! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
                 Magnam laborum animi fuga aliquid repudiandae error pariatur?
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellendus totam earum voluptatum quas cum! 
+                Repellendus totam earum voluptatum quas! 
               </p>
               <div className={styles.buttonWrapper}>
                 <button className={styles.buttonContinue}>Mark Complete</button>

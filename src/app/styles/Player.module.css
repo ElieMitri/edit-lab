@@ -1,0 +1,112 @@
+.videoWrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+  flex-direction: column;
+}
+
+.video {
+  width: 80%;
+}
+
+.videoTitle {
+  color: #5e17eb;
+  width: 80%;
+}
+
+.textWrapper {
+  width: 80%;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+}
+
+.buttonMark {
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #5e17eb;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.buttonMarkLast {
+    width: 170px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #3e178b;
+    outline: none;
+    border: none;
+    color: white;
+    cursor: not-allowed;
+    transition: 300ms all ease;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.completed {
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: rgb(32, 201, 32);
+}
+
+.buttonMark:hover {
+  background-color: #4a15b3;
+}
+
+.buttonContinue {
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #dadada;
+  outline: none;
+  border: none;
+  color: rgb(29, 29, 29);
+  cursor: pointer;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.buttonContinue:hover {
+  background-color: #afafaf;
+}
+
+@media (max-width: 720px) {
+  .video {
+    width: 100%;
+  }
+
+  .textWrapper {
+    width: 90%;
+  }
+}
+
+.lock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 70px;
+  color: white;
+  z-index: 10;
+}

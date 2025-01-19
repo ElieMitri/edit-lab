@@ -173,8 +173,42 @@
   transition: 300ms all ease;
 }
 
-.courseDetail:hover {
+.courseDetailAccess {
+  width: calc(70% / 3);
+  background-color: #505050;
+  border-radius: 7px;
+  margin: 20px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.courseDetailAccess:hover {
   background-color: #6b6b6b;
+}
+
+.courseDetail:hover {
+  background-color: #2b2b2b;
+  opacity: 0.7;
+}
+
+.courseDetail {
+  position: relative; /* Ensure positioning for child elements */
+}
+
+.noAccess {
+  color: red;
+  position: absolute; /* Adjust position as needed */
+  display: none; /* Initially hidden */
+}
+
+.courseDetail:hover .noAccess {
+  display: block; /* Show when hovering on the parent */
 }
 
 .detailItem {
