@@ -42,17 +42,17 @@
 }
 
 .buttonMarkLast {
-    width: 170px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: #3e178b;
-    outline: none;
-    border: none;
-    color: white;
-    cursor: not-allowed;
-    transition: 300ms all ease;
-    font-weight: bold;
-    font-size: 15px;
+  width: 170px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #3e178b;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: not-allowed;
+  transition: 300ms all ease;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .completed {

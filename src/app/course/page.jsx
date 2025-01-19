@@ -107,12 +107,12 @@ export default function Page({ params }) {
       }
     });
 
-    return () => unsubscribe(); // Cleanup the listener
+    return () => unsubscribe(); 
   }, []);
 
   function signOut() {
     firebaseSignOut(auth).then(() => {
-      //   router.push("/");
+      
     });
   }
 
@@ -176,91 +176,3 @@ export default function Page({ params }) {
     </>
   );
 }
-
-{
-  /* <div className={styles.videoWrapper}>
-            <div className={styles.video}>
-              <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
-                <iframe
-                  src="https://player.vimeo.com/video/851580640?badge=0&autopause=0&player_id=0&app_id=58479"
-                  frameBorder="0"
-                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  // title="Fortnite_20221029212356"
-                ></iframe>
-              </div>
-            </div>
-            <div className={styles.textWrapper}>
-              <h1 className={styles.videoTitle}>Editing</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellendus totam earum voluptatum quas cum! Aut iusto, dolorum
-                omnis aliquam tenetur nobis neque! Magnam laborum animi fuga
-                aliquid repudiandae error pariatur? Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Repellendus totam earum voluptatum
-                quas! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
-                Magnam laborum animi fuga aliquid repudiandae error pariatur?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Repellendus totam earum voluptatum quas! 
-              </p>
-              <div className={styles.buttonWrapper}>
-                <button className={styles.buttonContinue}>Mark Complete</button>
-                <button className={styles.buttonMark}>Continue</button>
-              </div>
-            </div>
-          </div> */
-}
-
-// {paid ? (
-//   <div className={styles.videoWrapper}>
-//     <div className={styles.video}>
-//       <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
-//         <iframe
-//           src="https://player.vimeo.com/video/851580640?badge=0&autopause=0&player_id=0&app_id=58479"
-//           frameBorder="0"
-//           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-//           style={{
-//             position: "absolute",
-//             top: 0,
-//             left: 0,
-//             width: "100%",
-//             height: "100%",
-//           }}
-//           // title="Fortnite_20221029212356"
-//         ></iframe>
-//       </div>
-//     </div>
-//     <div className={styles.textWrapper}>
-//       <h1 className={styles.videoTitle}>Editing</h1>
-//       <p>
-//         Lorem ipsum dolor sit amet consectetur adipisicing elit.
-//         Repellendus totam earum voluptatum quas cum! Aut iusto, dolorum
-//         omnis aliquam tenetur nobis neque! Magnam laborum animi fuga
-//         aliquid repudiandae error pariatur? Lorem ipsum dolor sit amet
-//         consectetur adipisicing elit. Repellendus totam earum voluptatum
-//         quas! Aut iusto, dolorum omnis aliquam tenetur nobis neque!
-//         Magnam laborum animi fuga aliquid repudiandae error pariatur?
-//         Lorem ipsum dolor sit amet consectetur adipisicing elit.
-//         Repellendus totam earum voluptatum quas cum!
-//       </p>
-//       <div className={styles.buttonWrapper}>
-//         <button className={styles.buttonContinue}>Mark Complete</button>
-//         <button className={styles.buttonMark}>Continue</button>
-//       </div>
-//     </div>
-//   </div>
-// ) : (
-//   <div className={styles.videoWrapper}>
-//   <div className={styles.video}>
-//     <div style={{ padding: "56.25% 0 0 0", position: "relative", backgroundColor: "black" }}>
-//       <div className={styles.playerText}></div>
-//     </div>
-//   </div>
-// </div>
-// )}
