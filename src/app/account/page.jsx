@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 
 import Navbar from "../components/Navbar";
 import styles from "../styles/Acc.module.css";
@@ -31,7 +30,7 @@ export default function Page() {
       if (currentUser) {
         // Get current logged-in user's email
         const currentUserEmail = currentUser.email;
-        console.log("Current User Email:", currentUserEmail);
+        // console.log("Current User Email:", currentUserEmail);
 
         try {
           // Create a Firestore query to fetch users by email
@@ -48,15 +47,15 @@ export default function Page() {
             // If a matching user is found
             const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
             setMatchingUser(matchedUser); // Store the matched user data
-            console.log("Matched User by Email:", matchedUser);
+            // console.log("Matched User by Email:", matchedUser);
           } else {
-            console.log("No user found with this email.");
+            // console.log("No user found with this email.");
           }
         } catch (error) {
-          console.error("Error fetching users by email:", error);
+          // console.error("Error fetching users by email:", error);
         }
       } else {
-        console.log("No user is signed in.");
+        // console.log("No user is signed in.");
       }
     });
 
@@ -78,9 +77,9 @@ export default function Page() {
       setUser(currentUser);
 
       if (currentUser) {
-        console.log(currentUser.displayName);
-        console.log(currentUser.email);
-        console.log(currentUser.uid);
+        // console.log(currentUser.displayName);
+        // console.log(currentUser.email);
+        // console.log(currentUser.uid);
 
         // Call the function to fetch all users from Firestore
         try {
@@ -92,12 +91,12 @@ export default function Page() {
             ...doc.data(), // Other user data
           }));
 
-          console.log("Fetched Users:", users);
+          // console.log("Fetched Users:", users);
         } catch (error) {
-          console.error("Error fetching users:", error);
+          // console.error("Error fetching users:", error);
         }
       } else {
-        console.log("No user is signed in.");
+        // console.log("No user is signed in.");
       }
     });
 
@@ -128,7 +127,9 @@ export default function Page() {
                 </div>
                 <div className={styles.accDetail}>
                   <h1 className={styles.accDetailText}>Subscription:</h1>
-                  <span className={styles.detail}>{matchingUser?.subscriptionPlan}</span>
+                  <span className={styles.detail}>
+                    {matchingUser?.subscriptionPlan}
+                  </span>
                 </div>
               </div>
             </div>

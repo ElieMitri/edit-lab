@@ -230,7 +230,8 @@
     justify-content: center;
   }
 
-  .courseDetail {
+  .courseDetail,
+  .courseDetailAccess {
     width: 50%;
     background-color: #505050;
     border-radius: 7px;
@@ -244,7 +245,8 @@
   }
 }
 @media (max-width: 570px) {
-  .courseDetail {
+  .courseDetail,
+  .courseDetailAccess {
     width: 70%;
   }
 }

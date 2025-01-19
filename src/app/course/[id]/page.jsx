@@ -21,6 +21,16 @@ import {
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { LuCrown } from "react-icons/lu";
 import { FaLock } from "react-icons/fa";
+import {
+  setDoc,
+  doc,
+  serverTimestamp,
+  addDoc,
+  getDoc,
+  updateDoc,
+  signOut,
+  getFirestore,
+} from "firebase/firestore";
 
 export default function Page({ params }) {
   const { id } = React.use(params);
@@ -30,54 +40,229 @@ export default function Page({ params }) {
   const [matchingUser, setMatchingUser] = useState();
   const [markedComplete, setMarkedComplete] = useState(false);
   const currentId = parseInt(id);
+  const [lessons, setLessons] = useState([]);
+  const [markedLessonResult, setMarkedLessonResult] = useState([]);
+  const [dataResult, setDataResult] = useState([]);
 
   const course = courseData.find((item) => +item.id === +id);
 
-  const maxId = Math.max(...courseData.map(course => course.id));
+  const maxId = Math.max(...courseData.map((course) => course.id));
   const isLastCourse = currentId >= maxId;
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (currentUser) {
-        // Get current logged-in user's email
         const currentUserEmail = currentUser.email;
-        console.log("Current User Email:", currentUserEmail);
+        // console.log("Current User Email:", currentUserEmail);
 
         try {
-          // Create a Firestore query to fetch users by email
           const usersCollectionRef = collection(db, "users");
           const q = query(
             usersCollectionRef,
             where("email", "==", currentUserEmail)
           );
 
-          // Get the users that match the email
           const querySnapshot = await getDocs(q);
 
           if (!querySnapshot.empty) {
             // If a matching user is found
-            const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
-            setMatchingUser(matchedUser); // Store the matched user data
-            console.log(matchedUser);
+            const matchedUser = querySnapshot.docs[0].data();
+            setMatchingUser(matchedUser);
+            // console.log(matchedUser);
             if (matchedUser.subscriptionPlan === "Paid") {
               setPaid(true);
             }
           } else {
-            console.log("No user found with this email.");
+            // console.log("No user found with this email.");
           }
         } catch (error) {
-          console.error("Error fetching users by email:", error);
+          // console.error("Error fetching users by email:", error);
         }
       } else {
-        console.log("No user is signed in.");
+        // console.log("No user is signed in.");
       }
     });
 
-    return () => unsubscribe(); // Cleanup the listener when the component unmounts
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchCompletedLessons = async () => {
+      try {
+        const lessonsRef = collection(
+          db,
+          "completedLessons",
+          user.uid,
+          "markedLessons"
+        );
+        const querySnapshot = await getDocs(lessonsRef);
+
+        const fetchedLessons = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setLessons(fetchedLessons);
+        console.log("Fetched Lessons:", fetchedLessons);
+      } catch (error) {
+        console.error("Error fetching completed lessons:", error);
+      }
+    };
+
+    fetchCompletedLessons();
+  }, [db, user]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchCompletedLessons = async () => {
+      try {
+        const lessonsRef = collection(
+          db,
+          "completedLessons",
+          user.uid,
+          "markedLessons"
+        );
+        const querySnapshot = await getDocs(lessonsRef);
+
+        const fetchedLessons = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setLessons(fetchedLessons);
+
+        if (id) {
+          const foundLesson = fetchedLessons.find((lesson) => lesson.id === id);
+          const isMarkedComplete =
+            foundLesson.markedComplete === "true" ||
+            foundLesson.markedComplete === true;
+          if (isMarkedComplete) {
+            setMarkedComplete(true);
+          }
+        } else {
+          console.log("No ID provided.");
+        }
+      } catch (error) {
+        console.error("Error fetching completed lessons:", error);
+      }
+    };
+
+    fetchCompletedLessons();
+  }, [db, user, id]);
+
+  useEffect(() => {
+    async function findMarkedLesson(db, userUid, lessonId) {
+      try {
+        const lessonsRef = collection(
+          db,
+          "completedLessons",
+          userUid,
+          "markedLessons"
+        );
+        const querySnapshot = await getDocs(lessonsRef);
+
+        let matchedLesson = null;
+        querySnapshot.forEach((doc) => {
+          const lessonData = doc.data();
+          if (lessonData.id === lessonId) {
+            matchedLesson = { markedLesson: doc.id, data: lessonData };
+          }
+        });
+
+        if (matchedLesson) {
+          return matchedLesson;
+        } else {
+          console.log("Lesson ID not found in markedLessons");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error fetching marked lessons:", error);
+      }
+    }
+
+    if (user?.uid && id) {
+      const userUid = user.uid;
+      const lessonId = id;
+
+      findMarkedLesson(db, userUid, lessonId).then((result) => {
+        if (result) {
+          console.log(result.markedLesson);
+          console.log("sdsd", result.data);
+          setMarkedLessonResult(result.markedLesson);
+          setDataResult(result.data);
+        } else {
+          // console.log("No match found.");
+        }
+      });
+    } else {
+      // console.log("User or lesson ID is not defined yet.");
+    }
+  }, [user, id, db]);
+  
+
+  async function markComplete() {
+    if (!user || !id) {
+      console.error("User or lesson ID is missing");
+      return;
+    }
+
+    setMarkedComplete(true);
+    const completeRef = doc(
+      db,
+      "completedLessons",
+      user.uid,
+      "markedLessons",
+      markedLessonResult
+    );
+
+    try {
+      await updateDoc(completeRef, {
+        markedComplete: true, 
+      });
+      console.log("Lesson marked as complete!");
+    } catch (error) {
+      console.error("Error marking lesson as complete:", error.message);
+    }
+  }
+
+  async function removeMarkComplete() {
+    if (!user || !id) {
+      console.error("User or lesson ID is missing");
+      return;
+    }
+
+    setMarkedComplete(false);
+
+    const completeRef = doc(
+      db,
+      "completedLessons",
+      user.uid,
+      "markedLessons",
+      markedLessonResult
+    );
+
+    try {
+      await updateDoc(completeRef, {
+        markedComplete: false, 
+      });
+      console.log("Lesson marked as incomplete!");
+    } catch (error) {
+      console.error("Error removing mark as complete:", error.message);
+    }
+  }
 
   return (
     <div>
@@ -89,7 +274,6 @@ export default function Page({ params }) {
             <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
               <iframe
                 src={course.videoUrl}
-                // src="https://player.vimeo.com/video/851580640?badge=0&autopause=0&player_id=0&app_id=58479"
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
                 style={{
@@ -110,14 +294,14 @@ export default function Page({ params }) {
               {markedComplete ? (
                 <button
                   className={styles.completed}
-                  onClick={() => setMarkedComplete(false)}
+                  onClick={removeMarkComplete}
                 >
                   Mark Complete
                 </button>
               ) : (
                 <button
                   className={styles.buttonContinue}
-                  onClick={() => setMarkedComplete(true)}
+                  onClick={markComplete}
                 >
                   Mark Complete
                 </button>

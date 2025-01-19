@@ -14,14 +14,6 @@ import { db, auth } from "../../../firebase";
 import Link from "next/link";
 import { IoMdPerson } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
-import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { IoIosArrowDown } from "react-icons/io";
-import { courseData } from "../../../courseData";
 
 const Sidebar = (setCloseSidebar) => {
   const [isOpen, setIsOpen] = useState(false);

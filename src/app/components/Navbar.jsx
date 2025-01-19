@@ -11,6 +11,8 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { IoMdPerson } from "react-icons/io";
+import { CiLogout } from "react-icons/ci";
 // import { useRouter } from "next/router";
 import { useRef, useEffect, useState } from "react";
 import { db, auth } from "../../../firebase";
@@ -90,25 +92,12 @@ export default function Navbar() {
   const userPassword = useRef("");
   const userName = useRef();
 
-  //   function isValidEmail(email) {
-  //     const re = /\S+@\S+\.\S+/;
-  //     return re.test(email);
-  //   }
-
   async function createAccount(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
     const email = userEmail.current.value;
     const password = userPassword.current.value;
     const displayName = userName.current.value;
-
-    // Validate email
-    // if (!isValidEmail(email)) {
-    //   setError("Email is invalid");
-    //   return;
-    // }
-
-    // setError(null);
 
     if (userPassword.current.value.length < 7) {
       setPasswordError("Password should be at least 8 characters");
@@ -138,6 +127,7 @@ export default function Navbar() {
       }
     }
   }
+
 
   async function login() {
     const email = userEmail.current.value;
@@ -206,12 +196,12 @@ export default function Navbar() {
             ...doc.data(), // Other user data
           }));
 
-          console.log("Fetched Users:", users);
+          // console.log("Fetched Users:", users);
         } catch (error) {
-          console.error("Error fetching users:", error);
+          // console.error("Error fetching users:", error);
         }
       } else {
-        console.log("No user is signed in.");
+        // console.log("No user is signed in.");
       }
     });
 
@@ -225,7 +215,7 @@ export default function Navbar() {
       if (currentUser) {
         // Get current logged-in user's email
         const currentUserEmail = currentUser.email;
-        console.log("Current User Email:", currentUserEmail);
+        // console.log("Current User Email:", currentUserEmail);
 
         try {
           // Create a Firestore query to fetch users by email
@@ -242,27 +232,23 @@ export default function Navbar() {
             // If a matching user is found
             const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
             setMatchingUser(matchedUser); // Store the matched user data
-            console.log(matchedUser);
+            // console.log(matchedUser);
             if (matchedUser.subscriptionPlan === "Paid") {
               setPaid(true);
             }
           } else {
-            console.log("No user found with this email.");
+            // console.log("No user found with this email.");
           }
         } catch (error) {
-          console.error("Error fetching users by email:", error);
+          // console.error("Error fetching users by email:", error);
         }
       } else {
-        console.log("No user is signed in.");
+        // console.log("No user is signed in.");
       }
     });
 
     return () => unsubscribe(); // Cleanup the listener when the component unmounts
   }, []);
-
-  function handlePayment() {
-    setOpenPayment(true);
-  }
 
   return (
     <>
@@ -284,7 +270,8 @@ export default function Navbar() {
             </figure>
           </div>
           <div className={styles.navText}>
-            <div className={styles.firstLetter}>{user.displayName[0]}</div>
+            {/* <div className={styles.firstLetter}>{user.displayName[0]}</div> */}
+            <LuCrown className={styles.crown} />
 
             {paid ? (
               <></>
