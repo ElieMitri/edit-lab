@@ -335,7 +335,8 @@ SIDEBAR
 
 .sidebar {
   width: 250px;
-  height: calc(100vh - 104px);
+  /* height: calc(100vh - 104px); */
+  height: calc(100% - 104px);
   background-color: #3b3b3b;
   position: fixed;
   bottom: 0;
