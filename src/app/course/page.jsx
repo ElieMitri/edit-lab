@@ -3,6 +3,7 @@
 import Navbar from "../components/Navbar";
 import styles from "../styles/Course.module.css";
 import { db, auth } from "../../../firebase";
+import React from 'react';
 import { useEffect, useState } from "react";
 import {
   signInWithEmailAndPassword,
