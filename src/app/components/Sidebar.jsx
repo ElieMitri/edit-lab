@@ -46,17 +46,12 @@ const Sidebar = (setCloseSidebar) => {
 
   return (
     <>
-      <button
+      {/* <button
         className={styles.menuButton}
         onClick={toggleSidebar}
         aria-label="Toggle menu"
       >
-        <div className={`${styles.hamburger} ${isOpen ? styles.active : ""}`}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
+      </button> */}
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <nav className={styles.navigation}>

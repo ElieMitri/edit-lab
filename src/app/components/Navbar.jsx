@@ -42,7 +42,6 @@ import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 import { IoClose } from "react-icons/io5";
-
 import OMT from "../../../public/OMT.png";
 import Whish from "../../../public/Whish.png";
 import Crypto from "../../../public/Crypto.png";
@@ -54,7 +53,7 @@ export default function Navbar() {
   const handleOpen = () => setOpen(true);
   const handleOpenPayment = () => setOpenPayment(true);
   const [openPayment, setOpenPayment] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [switched, setSwitched] = useState(false);
@@ -92,6 +91,16 @@ export default function Navbar() {
   const userPassword = useRef("");
   const userName = useRef();
 
+  const menuItems = [
+    { icon: "🏠", label: "Dashboard", link: "/" },
+    { icon: "📚", label: "Course", link: "/course" },
+    { icon: "⚙️", label: "Settings", link: "/account" },
+  ];
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   async function createAccount(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -127,7 +136,6 @@ export default function Navbar() {
       }
     }
   }
-
 
   async function login() {
     const email = userEmail.current.value;
