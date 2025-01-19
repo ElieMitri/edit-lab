@@ -28,21 +28,21 @@
   align-items: center;
   border-bottom: 1px solid #444;
   padding-bottom: 12px; /* Extra padding for spacing */
-  margin: 70px 0; /* Increased vertical spacing */
+  margin: 20px 0; /* Increased vertical spacing */
   gap: 80px; /* Very large gap between label and value */
 }
 
 /* Label Text */
 .accDetailText {
   font-weight: bold;
-  font-size: 28px; /* Larger font size for emphasis */
+  font-size: 20px; /* Larger font size for emphasis */
   margin-right: 100px; /* Maximum space between label and value */
   flex: 1; /* Allow flexibility for the text */
 }
 
 /* Value Text */
 .detail {
-  font-size: 24px; /* Larger value text */
+  font-size: 16px; /* Larger value text */
   color: #ccc;
   flex: 1; /* Allow flexibility for the text */
   text-align: right;

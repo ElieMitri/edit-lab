@@ -326,6 +326,7 @@ export default function Navbar() {
                       <Image src={Crypto} className={styles.paymentLogoCrypto} alt="" priority/>
                       <button className={styles.paymentName}>Crypto</button>
                     </div>
+                    
                   </div>
                 </div>
               </Box>
