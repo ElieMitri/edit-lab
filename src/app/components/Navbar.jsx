@@ -45,6 +45,7 @@ import { IoClose } from "react-icons/io5";
 import OMT from "../../../public/OMT.png";
 import Whish from "../../../public/Whish.png";
 import Crypto from "../../../public/Crypto.png";
+import { courseData } from "../../../courseData";
 
 export default function Navbar() {
   // const router = useRouter();
@@ -101,6 +102,30 @@ export default function Navbar() {
     setIsOpen(!isOpen);
   };
 
+  const addCoursesToFirestore = async () => {
+    try {
+      const userCoursesCollection = collection(
+        db,
+        "completedLessons",
+        user.uid,
+        "markedLessons"
+      );
+
+      // Iterate over each course in courseData
+      for (const course of courseData) {
+        await addDoc(userCoursesCollection, {
+          ...course, // Spread the course data into the Firestore document
+          addedAt: new Date(), // Optional: Add a timestamp for when the course was added
+        });
+        console.log(`Course added: ${course.title}`);
+      }
+
+      console.log("All courses have been added!");
+    } catch (error) {
+      console.error("Error adding courses to Firestore:", error);
+    }
+  };
+
   async function createAccount(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -129,11 +154,38 @@ export default function Navbar() {
           displayName: displayName,
           subscriptionPlan: "FREE",
         });
-        setMemberFirstLetter(user.displayName[0]);
+
+        for (let i = courseData.length - 1; i >= 0; i--) {
+          const course = courseData[i];
+
+          await addDoc(
+            collection(db, "completedLessons", user.uid, "markedLessons"),
+            {
+              id: course.id,
+              markedComplete: "false",
+            }
+          );
+        }
+
+        // setMemberFirstLetter(user.displayName[0]);
       } catch (error) {
         console.error("Error creating account:", error);
         setError(error.message);
       }
+    }
+  }
+
+  async function tryAdd() {
+    for (let i = courseData.length - 1; i >= 0; i--) {
+      const course = courseData[i];
+
+      await addDoc(
+        collection(db, "completedLessons", user.uid, "markedLessons"),
+        {
+          id: course.id,
+          markedComplete: "false",
+        }
+      );
     }
   }
 
@@ -279,10 +331,11 @@ export default function Navbar() {
           </div>
           <div className={styles.navText}>
             {/* <div className={styles.firstLetter}>{user.displayName[0]}</div> */}
-            <LuCrown className={styles.crown} />
 
             {paid ? (
-              <></>
+              <>
+                <LuCrown className={styles.crown} onClick={tryAdd} />
+              </>
             ) : (
               <button className={styles.button} onClick={handleOpenPayment}>
                 Lab Member <LuCrown className={styles.crown} />
