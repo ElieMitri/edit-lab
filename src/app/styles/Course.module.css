@@ -1,35 +1,28 @@
-.videoWrapperFake {
-  width: 100%;
-  height: calc(100vh - 84px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.playerTextFake {
-  text-align: center;
-  font-size: 40px;
-  color: red;
-}
-.videoFake {
-  width: 80%;
-}
-
+/* Video Section */
+.videoWrapperFake,
 .videoWrapper {
   width: 100%;
-  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0;
   flex-direction: column;
+}
+
+.videoWrapperFake {
+  height: calc(100vh - 84px);
 }
 
 .video {
   width: 80%;
 }
 
+.playerTextFake {
+  text-align: center;
+  font-size: 2.5rem;
+  color: red;
+}
+
+/* Text and Title */
 .videoTitle {
   color: #5e17eb;
   width: 80%;
@@ -39,24 +32,29 @@
   width: 80%;
 }
 
+/* Button Styles */
 .buttonWrapper {
   display: flex;
   justify-content: space-between;
   margin: 30px 0;
 }
 
-.buttonMark {
+.buttonMark,
+.buttonContinue {
   width: 170px;
   height: 40px;
   border-radius: 5px;
-  background-color: #5e17eb;
+  font-weight: bold;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   outline: none;
   border: none;
+}
+
+.buttonMark {
+  background-color: #5e17eb;
   color: white;
-  cursor: pointer;
-  transition: 300ms all ease;
-  font-weight: bold;
-  font-size: 15px;
 }
 
 .buttonMark:hover {
@@ -64,33 +62,15 @@
 }
 
 .buttonContinue {
-  width: 170px;
-  height: 40px;
-  border-radius: 5px;
   background-color: #dadada;
-  outline: none;
-  border: none;
-  color: rgb(29, 29, 29);
-  cursor: pointer;
-  transition: 300ms all ease;
-  font-weight: bold;
-  font-size: 15px;
+  color: #1d1d1d;
 }
 
 .buttonContinue:hover {
   background-color: #afafaf;
 }
 
-@media (max-width: 720px) {
-  .video {
-    width: 100%;
-  }
-
-  .textWrapper {
-    width: 90%;
-  }
-}
-
+/* Checkbox Styles */
 .checkboxWrapper {
   position: relative;
   display: flex;
@@ -114,7 +94,7 @@
   border: 2px solid #555;
   border-radius: 4px;
   display: inline-block;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
 }
 
@@ -141,112 +121,144 @@
   opacity: 1;
 }
 
+/* Course Layout */
 .courseDetailsWrapper {
   width: 100%;
-  /* height: calc(100vh - 84px); */
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .courseDetails {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 80%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
   align-items: center;
   justify-content: center;
 }
 
-.courseDetail {
-  width: calc(70% / 3);
+.courseDetail,
+.courseDetailAccess {
   background-color: #505050;
   border-radius: 7px;
-  margin: 20px;
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 30px;
+  padding: 1.875rem;
   cursor: pointer;
-  transition: 300ms all ease;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .courseDetailAccess {
-  width: calc(70% / 3);
-  background-color: #505050;
-  border-radius: 7px;
-  margin: 20px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 30px;
-  cursor: pointer;
-  transition: 300ms all ease;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .courseDetailAccess:hover {
-  background-color: #6b6b6b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #f5f5f5;
 }
 
 .courseDetail:hover {
   background-color: #2b2b2b;
-  opacity: 0.7;
-}
-
-.courseDetail {
-  position: relative; /* Ensure positioning for child elements */
 }
 
 .noAccess {
   color: red;
-  position: absolute; /* Adjust position as needed */
-  display: none; /* Initially hidden */
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .courseDetail:hover .noAccess {
-  display: block; /* Show when hovering on the parent */
+  opacity: 1;
 }
 
 .detailItem {
-  margin-bottom: 20px;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
   border-bottom: 2px solid white;
-  padding: 14px;
+  padding: 0.875rem;
   color: white;
   text-decoration: none;
   list-style-type: none;
 }
 
+.courseDetailAccess .detailItem {
+  border-bottom-color: #e0e0e0;
+  color: #333333;
+}
+
+.courseDetailAccess .detailItem:last-child {
+  color: #666666;
+}
+
+/* Media Queries */
 @media (max-width: 970px) {
-  .courseDetails {
-    display: flex;
+  .courseDetail,
+  .courseDetailAccess {
+    width: 80%;
+  }
+}
+
+@media (max-width: 720px) {
+  .video,
+  .textWrapper {
+    width: 90%;
+  }
+}
+
+@media (max-width: 570px) {
+  .buttonWrapper {
     flex-direction: column;
-    flex-wrap: nowrap;
-    /* width: 80%; */
+    gap: 1rem;
     align-items: center;
-    justify-content: center;
   }
 
-  .courseDetail,
-  .courseDetailAccess {
-    width: 50%;
-    background-color: #505050;
-    border-radius: 7px;
-    margin: 20px;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 30px;
+  .buttonMark,
+  .buttonContinue {
+    width: 100%;
+    max-width: 250px;
   }
 }
-@media (max-width: 570px) {
-  .courseDetail,
-  .courseDetailAccess {
-    width: 70%;
-  }
+
+.courseDetailsWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 1rem; */
 }
+
+.courseDetails {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.courseDetailAccess {
+  width: 300px; /* Fixed width instead of percentage */
+  background-color: #ffffff;
+  border-radius: 7px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Rest of your styles remain the same */

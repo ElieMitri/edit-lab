@@ -88,51 +88,51 @@ export default function Page({ params }) {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-
-    const fetchCompletedLessons = async () => {
-      try {
-        const lessonsRef = collection(
-          db,
-          "completedLessons",
-          user.uid,
-          "markedLessons"
-        );
-        const querySnapshot = await getDocs(lessonsRef);
-
-        const fetchedLessons = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setLessons(fetchedLessons);
-
-        if (id) {
-          const foundLesson = fetchedLessons.find((lesson) => lesson.id === id);
-
-          // Ensure foundLesson is defined before accessing its properties
-          if (foundLesson) {
-            const isMarkedComplete =
-              foundLesson.markedComplete === "true" ||
-              foundLesson.markedComplete === true;
-
-            if (isMarkedComplete) {
-              setMarkedComplete(true);
-            }
-          } else {
-            console.log("No lesson found with the provided ID.");
-          }
-        } else {
-          console.log("No ID provided.");
-        }
-      } catch (error) {
-        console.error("Error fetching completed lessons:", error);
-      }
-    };
-
-    fetchCompletedLessons();
-  }, [db, user, id]);
+  // useEffect(() => {
+  //   if (!user) return;
+  
+  //   const fetchCompletedLessons = async () => {
+  //     try {
+  //       const lessonsRef = collection(
+  //         db,
+  //         "completedLessons",
+  //         user.uid,
+  //         "markedLessons"
+  //       );
+  //       const querySnapshot = await getDocs(lessonsRef);
+  
+  //       const fetchedLessons = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  
+  //       setLessons(fetchedLessons);
+  
+  //       if (id) {
+  //         const foundLesson = fetchedLessons.find((lesson) => lesson.id === id);
+  
+  //         if (foundLesson) {
+  //           const isMarkedComplete =
+  //             foundLesson.markedComplete === "true" ||
+  //             foundLesson.markedComplete === true;
+  
+  //           if (isMarkedComplete) {
+  //             setMarkedComplete(true);
+  //           }
+  //         } else {
+  //           console.log("No lesson found with the provided ID.");
+  //         }
+  //       } else {
+  //         console.log("No ID provided.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching completed lessons:", error);
+  //     }
+  //   };
+  
+  //   fetchCompletedLessons();
+  // }, [db, user, id]);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -142,168 +142,148 @@ export default function Page({ params }) {
     return () => unsubscribe();
   }, [auth]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (!user) return;
+
+  //   const fetchCompletedLessons = async () => {
+  //     try {
+  //       const lessonsRef = collection(
+  //         db,
+  //         "completedLessons",
+  //         user.uid,
+  //         "markedLessons"
+  //       );
+  //       const querySnapshot = await getDocs(lessonsRef);
+
+  //       const fetchedLessons = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+
+  //       setLessons(fetchedLessons);
+
+  //       if (id) {
+  //         const foundLesson = fetchedLessons.find((lesson) => lesson.id === id);
+  //         console.log(foundLesson);
+          
+  //         const isMarkedComplete =
+  //           foundLesson.markedComplete === "true" ||
+  //           foundLesson.markedComplete === true;
+  //         if (isMarkedComplete) {
+  //           setMarkedComplete(true);
+  //         }
+  //       } else {
+  //         console.log("No ID provided.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching completed lessons:", error);
+  //     }
+  //   };
+
+  //   fetchCompletedLessons();
+  // }, [db, user, id]);
+
+  // useEffect(() => {
+  //   async function findMarkedLesson(db, userUid, lessonId) {
+  //     try {
+  //       const lessonsRef = collection(
+  //         db,
+  //         "completedLessons",
+  //         userUid,
+  //         "markedLessons"
+  //       );
+  //       const querySnapshot = await getDocs(lessonsRef);
+
+  //       let matchedLesson = null;
+  //       querySnapshot.forEach((doc) => {
+  //         const lessonData = doc.data();
+  //         if (lessonData.id === lessonId) {
+  //           matchedLesson = { markedLesson: doc.id, data: lessonData };
+  //         }
+  //       });
+
+  //       if (matchedLesson) {
+  //         return matchedLesson;
+  //       } else {
+  //         console.log("Lesson ID not found in markedLessons");
+  //         return null;
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching marked lessons:", error);
+  //     }
+  //   }
+
+  //   if (user?.uid && id) {
+  //     const userUid = user.uid;
+  //     const lessonId = id;
+
+  //     findMarkedLesson(db, userUid, lessonId).then((result) => {
+  //       if (result) {
+  //         setMarkedLessonResult(result.markedLesson);
+  //         setDataResult(result.data);
+  //       } else {
+  //         // console.log("No match found.");
+  //       }
+  //     });
+  //   } else {
+  //     // console.log("User or lesson ID is not defined yet.");
+  //   }
+  // }, [user, id, db]);
+  
+
+  async function markComplete() {
     if (!user || !id) {
-      console.log("User or lesson ID is missing");
+      console.error("User or lesson ID is missing");
       return;
     }
 
-    const fetchCompletedLessons = async () => {
-      try {
-        const lessonsRef = collection(
-          db,
-          "completedLessons",
-          user.uid,
-          "markedLessons"
-        );
-        const querySnapshot = await getDocs(lessonsRef);
-
-        const fetchedLessons = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setLessons(fetchedLessons);
-
-        // Ensure lessons are fetched before trying to find a specific one
-        if (fetchedLessons && fetchedLessons.length > 0) {
-          const foundLesson = fetchedLessons.find((lesson) => lesson.id === id);
-
-          if (foundLesson) {
-            const isMarkedComplete =
-              foundLesson.markedComplete === "true" ||
-              foundLesson.markedComplete === true;
-
-            setMarkedComplete(isMarkedComplete);
-          } else {
-            console.log(`Lesson with ID ${id} not found in fetchedLessons.`);
-          }
-        } else {
-          console.log("No lessons found in Firestore.");
-        }
-      } catch (error) {
-        console.error("Error fetching completed lessons:", error);
-      }
-    };
-
-    fetchCompletedLessons();
-  }, [db, user, id]);
-
-  useEffect(() => {
-    async function findMarkedLesson(db, userUid, lessonId) {
-      try {
-        const lessonsRef = collection(
-          db,
-          "completedLessons",
-          userUid,
-          "markedLessons"
-        );
-        const querySnapshot = await getDocs(lessonsRef);
-
-        let matchedLesson = null;
-        querySnapshot.forEach((doc) => {
-          const lessonData = doc.data();
-          if (lessonData.id === lessonId) {
-            matchedLesson = { markedLesson: doc.id, data: lessonData };
-          }
-        });
-
-        if (matchedLesson) {
-          return matchedLesson;
-        } else {
-          console.log("Lesson ID not found in markedLessons");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error fetching marked lessons:", error);
-      }
-    }
-
-    if (user?.uid && id) {
-      const userUid = user.uid;
-      const lessonId = id;
-
-      findMarkedLesson(db, userUid, lessonId).then((result) => {
-        if (result) {
-          setMarkedLessonResult(result.markedLesson);
-          setDataResult(result.data);
-        } else {
-          // console.log("No match found.");
-        }
-      });
-    } else {
-      // console.log("User or lesson ID is not defined yet.");
-    }
-  }, [user, id, db]);
-
-  async function markComplete() {
-    // if (!user || !id) {
-    //   console.error("User or lesson ID is missing");
-    //   return;
-    // }
-  
-    // Debugging logs to inspect values
-    // console.log("User UID:", user?.uid);
-    // console.log("Lesson ID:", id);
-    // console.log("Marked Lesson Result:", markedLessonResult);
-  
-    // Ensure user.uid and markedLessonResult are available
-    // if (!user.uid || !markedLessonResult) {
-    //   console.error("User UID or markedLessonResult is invalid.");
-    //   return;
-    // }
-  
     setMarkedComplete(true);
-  
-    // Constructing the correct path to the lesson document
-    // const completeRef = doc(
-    //   db,
-    //   "completedLessons",            
-    //   String(user.uid),              
-    //   "markedLessons",                
-    //   String(markedLessonResult)      
-    // );
-  
-    // Log to ensure the document reference is valid
-    // console.log("Complete Ref:", completeRef);
-  
-    // try {
-      // Update the lesson document to mark it as complete
-      // await updateDoc(completeRef, {
-        // markedComplete: true, 
-  //     });
-  //     console.log("Lesson marked as complete!");
-  //   } catch (error) {
-  //     console.error("Error marking lesson as complete:", error.message);
-  //   }
-   }
-  
+    const completeRef = doc(
+      db,
+      "completedLessons",
+      user.uid,
+      "markedLessons",
+      // markedLessonResult
+    );
+    console.log(completeRef);
+    
+
+    try {
+      await updateDoc(completeRef, {
+        markedComplete: true, 
+      });
+      console.log("Lesson marked as complete!");
+    } catch (error) {
+      console.error("Error marking lesson as complete:", error.message);
+    }
+  }
 
   async function removeMarkComplete() {
-    // if (!user || !id) {
-    //   console.error("User or lesson ID is missing");
-    //   return;
-    // }
+    if (!user || !id) {
+      console.error("User or lesson ID is missing");
+      return;
+    }
 
     setMarkedComplete(false);
 
-    // const completeRef = doc(
-    //   db,
-    //   "completedLessons",
-    //   user.uid,
-    //   "markedLessons",
-    //   markedLessonResult
-    // );
+    const completeRef = doc(
+      db,
+      "completedLessons",
+      user.uid,
+      "markedLessons",
+      markedLessonResult
+    );
 
-    // try {
-    //   await updateDoc(completeRef, {
-    //     markedComplete: false,
-    //   });
-    //   console.log("Lesson marked as incomplete!");
-    // } catch (error) {
-    //   console.error("Error removing mark as complete:", error.message);
-    // }
+    try {
+      await updateDoc(completeRef, {
+        markedComplete: false, 
+      });
+      console.log("Lesson marked as incomplete!");
+    } catch (error) {
+      console.error("Error removing mark as complete:", error.message);
+    }
   }
+  
 
   return (
     <div>

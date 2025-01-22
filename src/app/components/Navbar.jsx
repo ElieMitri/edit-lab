@@ -175,20 +175,6 @@ export default function Navbar() {
     }
   }
 
-  async function tryAdd() {
-    for (let i = courseData.length - 1; i >= 0; i--) {
-      const course = courseData[i];
-
-      await addDoc(
-        collection(db, "completedLessons", user.uid, "markedLessons"),
-        {
-          id: course.id,
-          markedComplete: "false",
-        }
-      );
-    }
-  }
-
   async function login() {
     const email = userEmail.current.value;
     const password = userPassword.current.value;
@@ -334,7 +320,7 @@ export default function Navbar() {
 
             {paid ? (
               <>
-                <LuCrown className={styles.crown} onClick={tryAdd} />
+                <LuCrown className={styles.crown}  />
               </>
             ) : (
               <button className={styles.button} onClick={handleOpenPayment}>

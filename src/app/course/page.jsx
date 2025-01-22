@@ -56,9 +56,8 @@ export default function Page({ params }) {
           const querySnapshot = await getDocs(q);
 
           if (!querySnapshot.empty) {
-            // If a matching user is found
-            const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
-            setMatchingUser(matchedUser); // Store the matched user data
+            const matchedUser = querySnapshot.docs[0].data(); 
+            setMatchingUser(matchedUser); 
             // console.log(matchedUser);
             if (matchedUser.subscriptionPlan === "Paid") {
               setPaid(true);
@@ -119,7 +118,7 @@ export default function Page({ params }) {
     <>
       <div>
         <Navbar />
-        {user ? (
+        {user && paid ? (
           <>
             {paid ? (
               <>

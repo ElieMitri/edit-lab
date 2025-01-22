@@ -15,7 +15,7 @@ import Link from "next/link";
 import { IoMdPerson } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 
-const Sidebar = (setCloseSidebar) => {
+export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(false);
 
@@ -68,6 +68,4 @@ const Sidebar = (setCloseSidebar) => {
       </aside>
     </>
   );
-};
-
-export default Sidebar;
+}

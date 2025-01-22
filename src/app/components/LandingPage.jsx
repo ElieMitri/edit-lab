@@ -1,10 +1,104 @@
-"use client"
+"use client";
 
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/LandingPage.module.css";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import OMT from "../../../public/OMT.png";
+import Whish from "../../../public/Whish.png";
+import Crypto from "../../../public/Crypto.png";
+import { LuCrown } from "react-icons/lu";
+import Image from "next/image";
+import style2 from "../styles/Nav.module.css";
+import { db, auth } from "../../../firebase";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
+import {
+  setDoc,
+  doc,
+  collection,
+  serverTimestamp,
+  addDoc,
+  getDoc,
+  updateDoc,
+  signOut,
+  getFirestore,
+  getDocs,
+} from "firebase/firestore";
+
+import { query, where } from "firebase/firestore";
 
 const LandingPage = () => {
+  const [openPayments, setOpenPayments] = useState(false);
+  const [user, setUser] = useState(false);
+  const [paid, setPaid] = useState(false);
+  const [matchingUser, setMatchingUser] = useState(false);
+  const handleClosePayment = () => setOpenPayments(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+
+      if (currentUser) {
+        // Get current logged-in user's email
+        const currentUserEmail = currentUser.email;
+        // console.log("Current User Email:", currentUserEmail);
+
+        try {
+          // Create a Firestore query to fetch users by email
+          const usersCollectionRef = collection(db, "users");
+          const q = query(
+            usersCollectionRef,
+            where("email", "==", currentUserEmail)
+          );
+
+          // Get the users that match the email
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            // If a matching user is found
+            const matchedUser = querySnapshot.docs[0].data(); // Get the first matching user
+            setMatchingUser(matchedUser); // Store the matched user data
+            // console.log(matchedUser);
+            if (matchedUser.subscriptionPlan === "Paid") {
+              setPaid(true);
+            }
+          } else {
+            // console.log("No user found with this email.");
+          }
+        } catch (error) {
+          // console.error("Error fetching users by email:", error);
+        }
+      } else {
+        // console.log("No user is signed in.");
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the listener when the component unmounts
+  }, []);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 320,
+    bgcolor: "#2f2f2f",
+    borderRadius: "15px",
+    padding: "0",
+    boxShadow: 24,
+    p: 4,
+    outline: "none",
+  };
+
   const courseStructure = [
     {
       id: 1,
@@ -99,30 +193,61 @@ const LandingPage = () => {
     },
   ];
 
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Content Creator",
-      image: "/api/placeholder/64/64",
-      text: "This course transformed my YouTube channel. The professional techniques I learned helped me double my subscriber count!",
-    },
-    {
-      name: "Michael Chen",
-      role: "Film Student",
-      image: "/api/placeholder/64/64",
-      text: "Clear, comprehensive, and practical. The instructor's approach made complex concepts easy to understand.",
-    },
-    {
-      name: "Emma Davis",
-      role: "Marketing Manager",
-      image: "/api/placeholder/64/64",
-      text: "Worth every penny! I now create professional-quality video content for our company's social media.",
-    },
-  ];
-
   return (
     <div className={styles.container}>
-      {/* Hero Section */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openPayments}
+        onClose={handleClosePayment}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={openPayments}>
+          <Box sx={style}>
+            <div className="login__inputs">
+              <h1 className="login__title">
+                Become a Premium Lab Member <LuCrown className={style2.crown} />
+              </h1>
+              <div className={style2.paymentMethods}>
+                <div className={style2.paymentMethod}>
+                  <Image
+                    src={OMT}
+                    className={style2.paymentLogoOMT}
+                    alt=""
+                    priority
+                  />
+                  <button className={style2.paymentName}>OMT</button>
+                </div>
+                <div className={style2.paymentMethod}>
+                  <Image
+                    src={Whish}
+                    className={style2.paymentLogoWhish}
+                    alt=""
+                    priority
+                  />
+                  <button className={style2.paymentName}>Whish</button>
+                </div>
+                <div className={style2.paymentMethod}>
+                  <Image
+                    src={Crypto}
+                    className={style2.paymentLogoCrypto}
+                    alt=""
+                    priority
+                  />
+                  <button className={style2.paymentName}>Crypto</button>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Fade>
+      </Modal>
+
       <header className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Master Video Editing</h1>
@@ -131,13 +256,18 @@ const LandingPage = () => {
             comprehensive video editing course.
           </p>
           <div className={styles.buttonGroup}>
-            <button className={styles.primaryButton}>Start Learning Now</button>
+            {paid ? (
+              <button className={styles.primaryButton}>
+                Start Learning Now
+              </button>
+            ) : (
+              <></>
+            )}
             <button className={styles.secondaryButton}>Watch Preview</button>
           </div>
         </div>
       </header>
 
-      {/* Stats Section */}
       <section className={styles.statsSection}>
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>
@@ -155,7 +285,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Course Overview */}
       <section className={styles.courseSection}>
         <h2 className={styles.sectionTitle}>Course Curriculum</h2>
         <div className={styles.courseGrid}>
@@ -179,29 +308,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      {/* <section className={styles.testimonialSection}>
-        <h2 className={styles.sectionTitle}>What Our Students Say</h2>
-        <div className={styles.testimonialGrid}>
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className={styles.testimonialCard}>
-              <div className={styles.testimonialHeader}>
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className={styles.testimonialImage}
-                />
-                <div>
-                  <h3 className={styles.testimonialName}>{testimonial.name}</h3>
-                  <p className={styles.testimonialRole}>{testimonial.role}</p>
-                </div>
-              </div>
-              <p className={styles.testimonialText}>{testimonial.text}</p>
-            </div>
-          ))}
-        </div>
-      </section> */}
-
       <section className={styles.featuresSection}>
         <h2 className={styles.sectionTitle}>Why Choose Our Course</h2>
         <div className={styles.featuresGrid}>
@@ -215,13 +321,21 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className={styles.ctaSection}>
-        <div className={styles.ctaContent}>
-          <h2 className={styles.ctaTitle}>Ready to Begin Your Journey?</h2>
-          <button className={styles.primaryButton}>Enroll Now</button>
-        </div>
-      </section>
+      {paid ? (
+        <></>
+      ) : (
+        <section className={styles.ctaSection}>
+          <div className={styles.ctaContent}>
+            <h2 className={styles.ctaTitle}>Ready to Begin Your Journey?</h2>
+            <button
+              onClick={() => setOpenPayments(true)}
+              className={styles.primaryButton}
+            >
+              Enroll Now
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

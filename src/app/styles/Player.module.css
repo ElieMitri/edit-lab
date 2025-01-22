@@ -100,6 +100,14 @@
     width: 90%;
   }
 }
+@media (max-width: 430px) {
+  .buttonContinue,
+  .buttonMark,
+  .buttonMarkLast,
+  .completed {
+    width: 160px;
+  }
+}
 
 .lock {
   position: absolute;

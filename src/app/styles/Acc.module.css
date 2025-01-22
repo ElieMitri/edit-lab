@@ -1,6 +1,5 @@
 /* Wrapper for Account Details */
 
-
 .accDetailsWrapper {
   display: flex; /* Use flexbox for alignment */
   justify-content: center; /* Center horizontally */
@@ -10,7 +9,7 @@
   margin: 0 auto;
   color: #fff;
   background-color: #2f2f2f; /* Ensure background is consistent */
-  height: calc(100vh - 84px); /* Full viewport height to center vertically */
+  height: calc(91vh - 104px);
   box-sizing: border-box; /* Include padding in width/height */
 }
 
@@ -28,7 +27,7 @@
   align-items: center;
   border-bottom: 1px solid #444;
   padding-bottom: 12px; /* Extra padding for spacing */
-  margin: 20px 0; /* Increased vertical spacing */
+  margin: 10px 0; /* Increased vertical spacing */
   gap: 80px; /* Very large gap between label and value */
 }
 
@@ -87,5 +86,3 @@
     font-size: 20px; /* Adjust button size */
   }
 }
-
-
