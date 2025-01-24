@@ -117,12 +117,12 @@ export default function Navbar() {
           ...course, // Spread the course data into the Firestore document
           addedAt: new Date(), // Optional: Add a timestamp for when the course was added
         });
-        console.log(`Course added: ${course.title}`);
+        // console.log(`Course added: ${course.title}`);
       }
 
-      console.log("All courses have been added!");
+      // console.log("All courses have been added!");
     } catch (error) {
-      console.error("Error adding courses to Firestore:", error);
+      // console.error("Error adding courses to Firestore:", error);
     }
   };
 
@@ -157,14 +157,18 @@ export default function Navbar() {
 
         for (let i = courseData.length - 1; i >= 0; i--) {
           const course = courseData[i];
-
-          await addDoc(
-            collection(db, "completedLessons", user.uid, "markedLessons"),
-            {
-              id: course.id,
-              markedComplete: "false",
-            }
+          const docRef = doc(
+            db,
+            "completedLessons",
+            user.uid,
+            "markedLessons",
+            (i + 1).toString()
           );
+
+          await setDoc(docRef, {
+            id: course.id,
+            markedComplete: "false",
+          });
         }
 
         // setMemberFirstLetter(user.displayName[0]);
@@ -320,7 +324,7 @@ export default function Navbar() {
 
             {paid ? (
               <>
-                <LuCrown className={styles.crown}  />
+                <LuCrown className={styles.crown} />
               </>
             ) : (
               <button className={styles.button} onClick={handleOpenPayment}>
