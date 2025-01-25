@@ -46,6 +46,7 @@ import OMT from "../../../public/OMT.png";
 import Whish from "../../../public/Whish.png";
 import Crypto from "../../../public/Crypto.png";
 import { courseData } from "../../../courseData";
+import { FaEye } from "react-icons/fa";
 
 export default function Navbar() {
   // const router = useRouter();
@@ -54,6 +55,14 @@ export default function Navbar() {
   const handleOpen = () => setOpen(true);
   const handleOpenPayment = () => setOpenPayment(true);
   const [openPayment, setOpenPayment] = useState(false);
+
+  const [emailCheck, setEmailCheck] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [nameCheck, setNameCheck] = useState();
+
+  const [createLoading, setCreateLoading] = useState(false);
+
+  const [email, setEmail] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -133,9 +142,13 @@ export default function Navbar() {
     const password = userPassword.current.value;
     const displayName = userName.current.value;
 
-    if (userPassword.current.value.length < 7) {
-      setPasswordError("Password should be at least 8 characters");
+    setCreateLoading(true);
+
+    if (userPassword.current.value.length <= 6) {
+      setPasswordError("Password should be at least 6 characters");
     } else {
+      setPasswordError(null);
+      setCreateLoading(false);
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -173,8 +186,9 @@ export default function Navbar() {
 
         // setMemberFirstLetter(user.displayName[0]);
       } catch (error) {
-        console.error("Error creating account:", error);
-        setError(error.message);
+        if (error.message === "Firebase: Error (auth/email-already-in-use).") {
+          setError("Email already in use");
+        }
       }
     }
   }
@@ -182,23 +196,49 @@ export default function Navbar() {
   async function login() {
     const email = userEmail.current.value;
     const password = userPassword.current.value;
-
-    if (userPassword.current.value.length < 7) {
-      setPasswordError("Password should be at least 8 characters");
+  
+    setCreateLoading(true); // Set loading state to true at the start of the process
+  
+    // Validate password length
+    if (userPassword.current.value.length <= 6) {
+      setPasswordError("Password should be at least 6 characters");
+      setCreateLoading(false); // Stop loading if validation fails
+      return;
     } else {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
+      setPasswordError(null);
+    }
+  
+    try {
+      // Attempt to sign in
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      setError(null); // Clear any previous errors
+      console.log("User signed in:", user);
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+  
+      // Handle specific error codes
+      if (errorCode === "auth/invalid-credential") {
+        setError("Incorrect Email or Password");
+      } else if (errorCode === "auth/user-not-found") {
+        setError("No user found with this email.");
+      } else if (errorCode === "auth/wrong-password") {
+        setError("Incorrect Password.");
+      } else if (errorCode === "auth/too-many-requests") {
+        setError("Too many failed attempts. Please try again later.");
+      } else {
+        // Fallback for other errors
+        setError("An unexpected error occurred. Please try again.");
+      }
+  
+      console.error("Error signing in:", errorCode, errorMessage);
+    } finally {
+      setCreateLoading(false); // Stop loading regardless of success or failure
     }
   }
-
+  
   function signOut() {
     firebaseSignOut(auth).then(() => {
       //   router.push("/");
@@ -299,6 +339,18 @@ export default function Navbar() {
 
     return () => unsubscribe(); // Cleanup the listener when the component unmounts
   }, []);
+
+  function switchToLogin() {
+    setSwitched(true);
+    setPasswordError(null);
+    setError(null);
+  }
+
+  function switchToSignUp() {
+    setSwitched(false);
+    setPasswordError(null);
+    setError(null);
+  }
 
   return (
     <>
@@ -419,7 +471,7 @@ export default function Navbar() {
               <Box sx={style}>
                 {switched ? (
                   <div className="login__inputs">
-                    <h1 className="login__title">Login</h1>
+                    <h1 className="login__title">Already a Lab Member?</h1>
                     {error ? (
                       <div className={styles.errorMessage}>{error}</div>
                     ) : (
@@ -430,7 +482,7 @@ export default function Navbar() {
                       className="modal__input"
                       placeholder="Email"
                       ref={userEmail}
-                      // onChange={() => console.log(userPassword.current.value)}
+                      onChange={() => setEmailCheck(userEmail.current.value)}
                     />
                     <div className="password__login">
                       <input
@@ -438,9 +490,11 @@ export default function Navbar() {
                         className="modal__input"
                         placeholder="••••••••••••"
                         ref={userPassword}
-                        // onChange={() => console.log(userPassword.current.value)}
+                        onChange={() =>
+                          setPasswordCheck(userPassword.current.value)
+                        }
                       />
-                      <div>
+                      <div className={styles.errorPasswordMessage}>
                         {passwordError ? (
                           <div className={styles.errorMessage}>
                             {passwordError}
@@ -450,40 +504,47 @@ export default function Navbar() {
                         )}
                       </div>
                     </div>
-                    <button className="login__btn cursor" onClick={login}>
-                      Log in
-                    </button>
+
+                    {!emailCheck || !passwordCheck ? (
+                      <button className="login__btn--no cursor">Log in</button>
+                    ) : createLoading ? (
+                      <button className="login__btn cursor">
+                        <div className="loader"></div>
+                      </button>
+                    ) : (
+                      <button className="login__btn cursor" onClick={login}>
+                        Log in
+                      </button>
+                    )}
+
                     <div className="login__or">
                       <h4 className="login__h4">OR</h4>
                     </div>
-                    <button
-                      className="login__button"
-                      onClick={() => setSwitched(false)}
-                    >
+                    <button className="login__button" onClick={switchToSignUp}>
                       Create an account
                     </button>
                   </div>
                 ) : (
                   <div className="login__inputs">
-                    <h1 className="login__title">Sign Up</h1>
+                    <h1 className="login__title">Become a Lab member!</h1>
                     {error ? (
                       <div className={styles.errorMessage}>{error}</div>
                     ) : (
                       <></>
                     )}
                     <input
-                      type="name"
-                      className="modal__input"
-                      placeholder="Name"
-                      ref={userName}
-                      // onChange={checkName}
-                    />
-                    <input
                       type="email"
                       className="modal__input"
                       placeholder="Email"
                       ref={userEmail}
-                      // onChange={checkEmail}
+                      onChange={() => setEmailCheck(userEmail.current.value)}
+                    />
+                    <input
+                      type="name"
+                      className="modal__input"
+                      placeholder="Name"
+                      ref={userName}
+                      onChange={() => setNameCheck(userName.current.value)}
                     />
                     <div className="password__login">
                       <input
@@ -491,21 +552,44 @@ export default function Navbar() {
                         className="modal__input"
                         placeholder="••••••••••••"
                         ref={userPassword}
+                        onChange={() =>
+                          setPasswordCheck(userPassword.current.value)
+                        }
                       />
                     </div>
-                    <button
+                    {passwordError ? (
+                      <div className={styles.errorMessage}>{passwordError}</div>
+                    ) : (
+                      <></>
+                    )}
+
+                    {!emailCheck || !passwordCheck || !nameCheck ? (
+                      <button
+                        className="login__btn--no cursor"
+                        //  onClick={createAccount}
+                      >
+                        Sign Up
+                      </button>
+                    ) : (
+                      <button
+                        className="login__btn cursor"
+                        onClick={createAccount}
+                      >
+                        Sign Up
+                      </button>
+                    )}
+
+                    {/* <button
                       className="login__btn cursor"
                       onClick={createAccount}
                     >
                       Sign Up
-                    </button>
+                    </button> */}
+
                     <div className="login__or">
                       <h4 className="login__h4">OR</h4>
                     </div>
-                    <button
-                      className="login__button"
-                      onClick={() => setSwitched(true)}
-                    >
+                    <button className="login__button" onClick={switchToLogin}>
                       Login
                     </button>
                   </div>

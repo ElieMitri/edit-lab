@@ -73,12 +73,18 @@
   color: white;
   background-color:  rgb(192, 27, 27);
   height: 40px;
-  width: 290px;
+  width: 300px;
   font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+}
+
+.errorPasswordMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .firstLetter {
