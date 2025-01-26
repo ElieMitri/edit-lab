@@ -258,13 +258,18 @@ const LandingPage = () => {
           </p>
           <div className={styles.buttonGroup}>
             {paid ? (
+                <Link href="/course" className={styles.startLearningLink}>
               <button className={styles.primaryButton}>
-                <Link href="/course" className={styles.startLearningLink}>Start Learning Now</Link>
+                  Start Learning Now
               </button>
+                </Link>
             ) : (
               <></>
             )}
-            <button className={styles.secondaryButton}><Link href="/preview" className={styles.previewLink}>Watch Preview</Link></button>
+            <Link href="/preview" className={styles.previewLink}>
+              {" "}
+              <button className={styles.secondaryButton}>Watch Preview</button>
+            </Link>
           </div>
         </div>
       </header>
