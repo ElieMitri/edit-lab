@@ -250,7 +250,9 @@ export default function Navbar() {
     }
   }
 
-  async function login() {
+  async function login(e) {
+    e.preventDefault();
+
     const email = userEmail.current.value;
     const password = userPassword.current.value;
 
@@ -552,18 +554,21 @@ export default function Navbar() {
                       />
                       <div className="password__login">
                         {clickedShowPass ? (
-                           <div className="modal__input--pas">
-                           <input
-                             type="text"
-                             className="modal__input-pass"
-                             placeholder="••••••••••••"
-                             ref={userPassword}
-                             onChange={() =>
-                               setPasswordCheck(userPassword.current.value)
-                             }
-                           />
-                           <HiMiniEyeSlash className="eye"  onClick={() => setClickedShowPass(false)}/>
-                         </div>
+                          <div className="modal__input--pas">
+                            <input
+                              type="text"
+                              className="modal__input-pass"
+                              placeholder="••••••••••••"
+                              ref={userPassword}
+                              onChange={() =>
+                                setPasswordCheck(userPassword.current.value)
+                              }
+                            />
+                            <HiMiniEyeSlash
+                              className="eye"
+                              onClick={() => setClickedShowPass(false)}
+                            />
+                          </div>
                         ) : (
                           <div className="modal__input--pas">
                             <input
@@ -575,7 +580,10 @@ export default function Navbar() {
                                 setPasswordCheck(userPassword.current.value)
                               }
                             />
-                            <FaEye className="eye" onClick={() => setClickedShowPass(true)}/>
+                            <FaEye
+                              className="eye"
+                              onClick={() => setClickedShowPass(true)}
+                            />
                           </div>
                         )}
 
@@ -599,7 +607,7 @@ export default function Navbar() {
                           <div className="loader"></div>
                         </button>
                       ) : (
-                        <button className="login__btn cursor" onClick={login}>
+                        <button className="login__btn cursor" onClick={(e) => login(e)}>
                           Log in
                         </button>
                       )}
@@ -652,18 +660,21 @@ export default function Navbar() {
                           }
                         /> */}
                         {clickedShowPass ? (
-                           <div className="modal__input--pas">
-                           <input
-                             type="text"
-                             className="modal__input-pass"
-                             placeholder="••••••••••••"
-                             ref={userPassword}
-                             onChange={() =>
-                               setPasswordCheck(userPassword.current.value)
-                             }
-                           />
-                           <HiMiniEyeSlash className="eye"  onClick={() => setClickedShowPass(false)}/>
-                         </div>
+                          <div className="modal__input--pas">
+                            <input
+                              type="text"
+                              className="modal__input-pass"
+                              placeholder="••••••••••••"
+                              ref={userPassword}
+                              onChange={() =>
+                                setPasswordCheck(userPassword.current.value)
+                              }
+                            />
+                            <HiMiniEyeSlash
+                              className="eye"
+                              onClick={() => setClickedShowPass(false)}
+                            />
+                          </div>
                         ) : (
                           <div className="modal__input--pas">
                             <input
@@ -675,7 +686,10 @@ export default function Navbar() {
                                 setPasswordCheck(userPassword.current.value)
                               }
                             />
-                            <FaEye className="eye" onClick={() => setClickedShowPass(true)}/>
+                            <FaEye
+                              className="eye"
+                              onClick={() => setClickedShowPass(true)}
+                            />
                           </div>
                         )}
                       </div>
