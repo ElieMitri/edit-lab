@@ -16,6 +16,7 @@ import { CiLogout } from "react-icons/ci";
 // import { useRouter } from "next/router";
 import { useRef, useEffect, useState } from "react";
 import { db, auth } from "../../../firebase";
+import { HiMiniEyeSlash } from "react-icons/hi2";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -61,6 +62,7 @@ export default function Navbar() {
   const [nameCheck, setNameCheck] = useState();
 
   const [createLoading, setCreateLoading] = useState(false);
+  const [clickedShowPass, setClickedShowPass] = useState(false);
 
   const [email, setEmail] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -136,14 +138,14 @@ export default function Navbar() {
   };
 
   async function createAccount(e) {
-    e.preventDefault(); // Prevent the default form submission behavior
-  
+    e.preventDefault();
+
     const email = userEmail.current.value;
     const password = userPassword.current.value;
     const displayName = userName.current.value;
-  
+
     setCreateLoading(true);
-  
+
     if (userPassword.current.value.length <= 6) {
       setPasswordError("Password should be at least 6 characters");
       setCreateLoading(false);
@@ -151,22 +153,26 @@ export default function Navbar() {
     } else {
       setPasswordError(null);
     }
-  
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-  
+
       await updateProfile(user, {
         displayName: displayName,
       });
-  
+
       await addDoc(collection(db, "users"), {
         uid: user.uid,
         email: user.email,
         displayName: displayName,
         subscriptionPlan: "FREE",
       });
-  
+
       for (let i = courseData.length - 1; i >= 0; i--) {
         const course = courseData[i];
         const docRef = doc(
@@ -176,66 +182,73 @@ export default function Navbar() {
           "markedLessons",
           (i + 1).toString()
         );
-  
+
         await setDoc(docRef, {
           id: course.id,
           markedComplete: "false",
         });
       }
-  
+
       setOpenedSidebar(false);
-  
+
       // setMemberFirstLetter(user.displayName[0]);
       setCreateLoading(false);
     } catch (error) {
       setCreateLoading(false); // Ensure loading state is reset in case of an error
-  
+
       const errorCode = error.code; // Firebase error code
       const errorMessage = error.message; // Full error message (includes error code)
-  
+
       // Handle specific error codes
       switch (errorCode) {
         case "auth/email-already-in-use":
           setError("The email address is already in use by another account.");
           break;
-  
+
         case "auth/invalid-email":
-          setError("The email address is not valid. Please check and try again.");
+          setError(
+            "The email address is not valid. Please check and try again."
+          );
           break;
-  
+
         case "auth/operation-not-allowed":
-          setError("Email/password accounts are not enabled. Please contact support.");
+          setError(
+            "Email/password accounts are not enabled. Please contact support."
+          );
           break;
-  
+
         case "auth/weak-password":
-          setError("The password is too weak. Please choose a stronger password.");
+          setError(
+            "The password is too weak. Please choose a stronger password."
+          );
           break;
-  
+
         case "auth/missing-email":
           setError("Email address is required. Please provide a valid email.");
           break;
-  
+
         case "auth/internal-error":
           setError("An internal error occurred. Please try again later.");
           break;
-  
+
         case "auth/network-request-failed":
-          setError("Network error. Please check your internet connection and try again.");
+          setError(
+            "Network error. Please check your internet connection and try again."
+          );
           break;
-  
+
         case "auth/too-many-requests":
           setError("Too many attempts. Please try again later.");
           break;
-  
+
         default:
           // Generic fallback for unexpected errors
           setError("An unexpected error occurred. Please try again.");
       }
-  
+
       console.error("Error creating account:", errorCode, errorMessage); // Log for debugging
     }
   }
-  
 
   async function login() {
     const email = userEmail.current.value;
@@ -394,7 +407,8 @@ export default function Navbar() {
     setError(null);
   }
 
-  function switchToSignUp() {
+  function switchToSignUp(e) {
+    e.preventDefault();
     setSwitched(false);
     setPasswordError(null);
     setError(null);
@@ -519,127 +533,180 @@ export default function Navbar() {
               <Box sx={style}>
                 {switched ? (
                   <div className="login__inputs">
-                    <h1 className="login__title">Already a Lab Member?</h1>
-                    {error ? (
-                      <div className={styles.errorMessage}>{error}</div>
-                    ) : (
-                      <></>
-                    )}
-                    <input
-                      type="email"
-                      className="modal__input"
-                      placeholder="Email"
-                      ref={userEmail}
-                      onChange={() => setEmailCheck(userEmail.current.value)}
-                    />
-                    <div className="password__login">
+                    <form
+                      className={styles.form}
+                      // action={login}
+                    >
+                      <h1 className="login__title">Already a Lab Member?</h1>
+                      {error ? (
+                        <div className={styles.errorMessage}>{error}</div>
+                      ) : (
+                        <></>
+                      )}
                       <input
-                        type="password"
+                        type="email"
                         className="modal__input"
-                        placeholder="••••••••••••"
-                        ref={userPassword}
-                        onChange={() =>
-                          setPasswordCheck(userPassword.current.value)
-                        }
+                        placeholder="Email"
+                        ref={userEmail}
+                        onChange={() => setEmailCheck(userEmail.current.value)}
                       />
-                      <div className={styles.errorPasswordMessage}>
-                        {passwordError ? (
-                          <div className={styles.errorMessage}>
-                            {passwordError}
-                          </div>
+                      <div className="password__login">
+                        {clickedShowPass ? (
+                           <div className="modal__input--pas">
+                           <input
+                             type="text"
+                             className="modal__input-pass"
+                             placeholder="••••••••••••"
+                             ref={userPassword}
+                             onChange={() =>
+                               setPasswordCheck(userPassword.current.value)
+                             }
+                           />
+                           <HiMiniEyeSlash className="eye"  onClick={() => setClickedShowPass(false)}/>
+                         </div>
                         ) : (
-                          <></>
+                          <div className="modal__input--pas">
+                            <input
+                              type="password"
+                              className="modal__input-pass"
+                              placeholder="••••••••••••"
+                              ref={userPassword}
+                              onChange={() =>
+                                setPasswordCheck(userPassword.current.value)
+                              }
+                            />
+                            <FaEye className="eye" onClick={() => setClickedShowPass(true)}/>
+                          </div>
                         )}
+
+                        <div className={styles.errorPasswordMessage}>
+                          {passwordError ? (
+                            <div className={styles.errorMessage}>
+                              {passwordError}
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {!emailCheck || !passwordCheck ? (
-                      <button className="login__btn--no cursor">Log in</button>
-                    ) : createLoading ? (
-                      <button className="login__btn cursor">
-                        <div className="loader"></div>
-                      </button>
-                    ) : (
-                      <button className="login__btn cursor" onClick={login}>
-                        Log in
-                      </button>
-                    )}
+                      {!emailCheck || !passwordCheck ? (
+                        <button className="login__btn--no cursor">
+                          Log in
+                        </button>
+                      ) : createLoading ? (
+                        <button className="login__btn cursor">
+                          <div className="loader"></div>
+                        </button>
+                      ) : (
+                        <button className="login__btn cursor" onClick={login}>
+                          Log in
+                        </button>
+                      )}
 
-                    <div className="login__or">
-                      <h4 className="login__h4">OR</h4>
-                    </div>
-                    <button className="login__button" onClick={switchToSignUp}>
-                      Create an account
-                    </button>
+                      <div className="login__or">
+                        <h4 className="login__h4">OR</h4>
+                      </div>
+                      <button
+                        className="login__button"
+                        onClick={switchToSignUp}
+                      >
+                        Create an account
+                      </button>
+                    </form>
                   </div>
                 ) : (
                   <div className="login__inputs">
-                    <h1 className="login__title">Become a Lab member!</h1>
-                    {error ? (
-                      <div className={styles.errorMessage}>{error}</div>
-                    ) : (
-                      <></>
-                    )}
-                    <input
-                      type="email"
-                      className="modal__input"
-                      placeholder="Email"
-                      ref={userEmail}
-                      onChange={() => setEmailCheck(userEmail.current.value)}
-                    />
-                    <input
-                      type="name"
-                      className="modal__input"
-                      placeholder="Name"
-                      ref={userName}
-                      onChange={() => setNameCheck(userName.current.value)}
-                    />
-                    <div className="password__login">
-                      <input
-                        type="password"
-                        className="modal__input"
-                        placeholder="••••••••••••"
-                        ref={userPassword}
-                        onChange={() =>
-                          setPasswordCheck(userPassword.current.value)
-                        }
-                      />
-                    </div>
-                    {passwordError ? (
-                      <div className={styles.errorMessage}>{passwordError}</div>
-                    ) : (
-                      <></>
-                    )}
-
-                    {!emailCheck || !passwordCheck || !nameCheck ? (
-                      <button
-                        className="login__btn--no cursor"
-                        //  onClick={createAccount}
-                      >
-                        Sign Up
-                      </button>
-                    ) : (
-                      <button
-                        className="login__btn cursor"
-                        onClick={createAccount}
-                      >
-                        Sign Up
-                      </button>
-                    )}
-
-                    {/* <button
-                      className="login__btn cursor"
-                      onClick={createAccount}
+                    <form
+                      className={styles.form}
+                      // action={(e) => createAccount(e)}
                     >
-                      Sign Up
-                    </button> */}
+                      <h1 className="login__title">Become a Lab member!</h1>
+                      {error ? (
+                        <div className={styles.errorMessage}>{error}</div>
+                      ) : (
+                        <></>
+                      )}
+                      <input
+                        type="email"
+                        className="modal__input"
+                        placeholder="Email"
+                        ref={userEmail}
+                        onChange={() => setEmailCheck(userEmail.current.value)}
+                      />
+                      <input
+                        type="name"
+                        className="modal__input"
+                        placeholder="Name"
+                        ref={userName}
+                        onChange={() => setNameCheck(userName.current.value)}
+                      />
+                      <div className="password__login">
+                        {/* <input
+                          type="password"
+                          className="modal__input"
+                          placeholder="••••••••••••"
+                          ref={userPassword}
+                          onChange={() =>
+                            setPasswordCheck(userPassword.current.value)
+                          }
+                        /> */}
+                        {clickedShowPass ? (
+                           <div className="modal__input--pas">
+                           <input
+                             type="text"
+                             className="modal__input-pass"
+                             placeholder="••••••••••••"
+                             ref={userPassword}
+                             onChange={() =>
+                               setPasswordCheck(userPassword.current.value)
+                             }
+                           />
+                           <HiMiniEyeSlash className="eye"  onClick={() => setClickedShowPass(false)}/>
+                         </div>
+                        ) : (
+                          <div className="modal__input--pas">
+                            <input
+                              type="password"
+                              className="modal__input-pass"
+                              placeholder="••••••••••••"
+                              ref={userPassword}
+                              onChange={() =>
+                                setPasswordCheck(userPassword.current.value)
+                              }
+                            />
+                            <FaEye className="eye" onClick={() => setClickedShowPass(true)}/>
+                          </div>
+                        )}
+                      </div>
+                      {passwordError ? (
+                        <div className={styles.errorMessage}>
+                          {passwordError}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
 
-                    <div className="login__or">
-                      <h4 className="login__h4">OR</h4>
-                    </div>
-                    <button className="login__button" onClick={switchToLogin}>
-                      Login
-                    </button>
+                      {!emailCheck || !passwordCheck || !nameCheck ? (
+                        <button className="login__btn--no cursor">
+                          Sign Up
+                        </button>
+                      ) : (
+                        <button
+                          className="login__btn cursor"
+                          onClick={(e) => createAccount(e)}
+                        >
+                          Sign Up
+                        </button>
+                      )}
+
+                      <div className="login__or">
+                        <h4 className="login__h4">OR</h4>
+                      </div>
+                      <button className="login__button" onClick={switchToLogin}>
+                        Login
+                      </button>
+                    </form>
                   </div>
                 )}
               </Box>

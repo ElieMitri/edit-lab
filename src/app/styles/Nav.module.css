@@ -192,6 +192,13 @@ justify-content: center;
   height: auto;
 }
 
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 @media (max-width: 740px) {
   .logoWrapper {
     width: 150px;
