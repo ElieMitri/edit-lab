@@ -21,7 +21,7 @@ export default function Home() {
             className={style.previewVideo}
           >
             <iframe
-              src="https://player.vimeo.com/video/851580640?badge=0&autopause=0&player_id=0&app_id=58479"
+              src="https://player.vimeo.com/video/1050468449?h=cdccb8875e&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
               frameBorder="0"
               allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
               style={{
