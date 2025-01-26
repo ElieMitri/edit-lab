@@ -83,7 +83,7 @@ export default function Navbar() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 320,
+    width: 300,
     bgcolor: "#2f2f2f",
     borderRadius: "15px",
     padding: "0",

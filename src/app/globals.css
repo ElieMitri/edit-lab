@@ -52,7 +52,7 @@ body {
   transition: all 0.3s ease;
   outline: none;
   margin: 10px 0;
-  width: 313px;
+  width: 312px;
   display: flex;
   align-items: center;
   /* justify-content: space-between;z */
@@ -68,7 +68,7 @@ body {
   color: white;
   transition: all 0.3s ease;
   outline: none;
-  width: 296px;
+  width: 313px;
 }
 
 .modal__input-pass:focus {
@@ -82,7 +82,8 @@ body {
   padding-right: 16px;
   transition: 300ms all ease;
   cursor: pointer;
-  position: relative;
+  position: fixed;
+  right: 30px !important ;
 }
 .eye:hover {
   color: #6b6b6b;
