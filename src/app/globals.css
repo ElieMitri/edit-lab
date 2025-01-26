@@ -71,7 +71,6 @@ body {
   width: 296px;
 }
 
-/* Glow effect when focused */
 .modal__input-pass:focus {
   box-shadow: 0 0 40px 2px #5e17eb; 
   border: 1px solid #5e17eb; 
