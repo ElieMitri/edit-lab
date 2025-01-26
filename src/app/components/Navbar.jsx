@@ -137,68 +137,112 @@ export default function Navbar() {
 
   async function createAccount(e) {
     e.preventDefault(); // Prevent the default form submission behavior
-
+  
     const email = userEmail.current.value;
     const password = userPassword.current.value;
     const displayName = userName.current.value;
-
+  
     setCreateLoading(true);
-
+  
     if (userPassword.current.value.length <= 6) {
       setPasswordError("Password should be at least 6 characters");
+      setCreateLoading(false);
+      return;
     } else {
       setPasswordError(null);
-      setCreateLoading(false);
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
+    }
+  
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      await updateProfile(user, {
+        displayName: displayName,
+      });
+  
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        email: user.email,
+        displayName: displayName,
+        subscriptionPlan: "FREE",
+      });
+  
+      for (let i = courseData.length - 1; i >= 0; i--) {
+        const course = courseData[i];
+        const docRef = doc(
+          db,
+          "completedLessons",
+          user.uid,
+          "markedLessons",
+          (i + 1).toString()
         );
-        const user = userCredential.user;
-
-        await updateProfile(user, {
-          displayName: displayName,
+  
+        await setDoc(docRef, {
+          id: course.id,
+          markedComplete: "false",
         });
-
-        await addDoc(collection(db, "users"), {
-          uid: user.uid,
-          email: user.email,
-          displayName: displayName,
-          subscriptionPlan: "FREE",
-        });
-
-        for (let i = courseData.length - 1; i >= 0; i--) {
-          const course = courseData[i];
-          const docRef = doc(
-            db,
-            "completedLessons",
-            user.uid,
-            "markedLessons",
-            (i + 1).toString()
-          );
-
-          await setDoc(docRef, {
-            id: course.id,
-            markedComplete: "false",
-          });
-        }
-
-        // setMemberFirstLetter(user.displayName[0]);
-      } catch (error) {
-        if (error.message === "Firebase: Error (auth/email-already-in-use).") {
-          setError("Email already in use");
-        }
       }
+  
+      setOpenedSidebar(false);
+  
+      // setMemberFirstLetter(user.displayName[0]);
+      setCreateLoading(false);
+    } catch (error) {
+      setCreateLoading(false); // Ensure loading state is reset in case of an error
+  
+      const errorCode = error.code; // Firebase error code
+      const errorMessage = error.message; // Full error message (includes error code)
+  
+      // Handle specific error codes
+      switch (errorCode) {
+        case "auth/email-already-in-use":
+          setError("The email address is already in use by another account.");
+          break;
+  
+        case "auth/invalid-email":
+          setError("The email address is not valid. Please check and try again.");
+          break;
+  
+        case "auth/operation-not-allowed":
+          setError("Email/password accounts are not enabled. Please contact support.");
+          break;
+  
+        case "auth/weak-password":
+          setError("The password is too weak. Please choose a stronger password.");
+          break;
+  
+        case "auth/missing-email":
+          setError("Email address is required. Please provide a valid email.");
+          break;
+  
+        case "auth/internal-error":
+          setError("An internal error occurred. Please try again later.");
+          break;
+  
+        case "auth/network-request-failed":
+          setError("Network error. Please check your internet connection and try again.");
+          break;
+  
+        case "auth/too-many-requests":
+          setError("Too many attempts. Please try again later.");
+          break;
+  
+        default:
+          // Generic fallback for unexpected errors
+          setError("An unexpected error occurred. Please try again.");
+      }
+  
+      console.error("Error creating account:", errorCode, errorMessage); // Log for debugging
     }
   }
+  
 
   async function login() {
     const email = userEmail.current.value;
     const password = userPassword.current.value;
-  
+
     setCreateLoading(true); // Set loading state to true at the start of the process
-  
+
     // Validate password length
     if (userPassword.current.value.length <= 6) {
       setPasswordError("Password should be at least 6 characters");
@@ -207,18 +251,22 @@ export default function Navbar() {
     } else {
       setPasswordError(null);
     }
-  
+
     try {
       // Attempt to sign in
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-  
+
       setError(null); // Clear any previous errors
-      console.log("User signed in:", user);
+      setOpenedSidebar(false);
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-  
+
       // Handle specific error codes
       if (errorCode === "auth/invalid-credential") {
         setError("Incorrect Email or Password");
@@ -232,13 +280,13 @@ export default function Navbar() {
         // Fallback for other errors
         setError("An unexpected error occurred. Please try again.");
       }
-  
+
       console.error("Error signing in:", errorCode, errorMessage);
     } finally {
       setCreateLoading(false); // Stop loading regardless of success or failure
     }
   }
-  
+
   function signOut() {
     firebaseSignOut(auth).then(() => {
       //   router.push("/");

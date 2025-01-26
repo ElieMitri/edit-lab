@@ -45,9 +45,13 @@
   padding: 0.75rem 2rem;
   border-radius: 0.5rem;
   font-weight: 600;
-  transition: background-color 0.2s;
   border: none;
   cursor: pointer;
+  transition: 300ms all ease;
+}
+
+.primaryButton:hover {
+  background-color: rgb(202, 202, 202);
 }
 
 .primaryButton:hover {
@@ -534,5 +538,16 @@ SIDEBAR
 }
 .logoutBtn:hover {
   color: rgb(172, 3, 3);
+}
+
+
+.previewLink {
+  color: white;
+  text-decoration: none;
+}
+
+.startLearningLink {
+  color: #5e17eb;
+  text-decoration: none;
 }
 

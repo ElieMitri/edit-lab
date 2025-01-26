@@ -35,6 +35,7 @@ import {
 } from "firebase/firestore";
 
 import { query, where } from "firebase/firestore";
+import Link from "next/link";
 
 const LandingPage = () => {
   const [openPayments, setOpenPayments] = useState(false);
@@ -258,26 +259,26 @@ const LandingPage = () => {
           <div className={styles.buttonGroup}>
             {paid ? (
               <button className={styles.primaryButton}>
-                Start Learning Now
+                <Link href="/course" className={styles.startLearningLink}>Start Learning Now</Link>
               </button>
             ) : (
               <></>
             )}
-            <button className={styles.secondaryButton}>Watch Preview</button>
+            <button className={styles.secondaryButton}><Link href="/preview" className={styles.previewLink}>Watch Preview</Link></button>
           </div>
         </div>
       </header>
 
       <section className={styles.statsSection}>
         <div className={styles.statsGrid}>
-          <div className={styles.statItem}>
+          {/* <div className={styles.statItem}>
             <div className={styles.statNumber}>1000+</div>
             <div className={styles.statLabel}>Students Enrolled</div>
           </div>
           <div className={styles.statItem}>
             <div className={styles.statNumber}>9.5/10</div>
             <div className={styles.statLabel}>Average Rating</div>
-          </div>
+          </div> */}
           <div className={styles.statItem}>
             <div className={styles.statNumber}>40+</div>
             <div className={styles.statLabel}>Hours of Content</div>
