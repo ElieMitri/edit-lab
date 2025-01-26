@@ -79,11 +79,10 @@ body {
 .eye {
   color: #a3a3a3;
   font-size: 24px;
-  padding-right: 10px;
+  padding-right: 16px;
   transition: 300ms all ease;
   cursor: pointer;
-  position: fixed;
-  right: 40;
+  position: relative;
 }
 .eye:hover {
   color: #6b6b6b;
